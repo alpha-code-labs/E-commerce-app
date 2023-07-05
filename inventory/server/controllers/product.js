@@ -7,18 +7,18 @@ import Product from '../model/productSchema.js';
 const createProduct = async (req, res) => {
     try {
       const {
-        name,
+        productName,
         description,
         quantity,
         price,
         category,
         image,
-        available,
+        available, 
         supplier
       } = req.body;
   
       const product = new Product({
-        name,
+        productName,
         description,
         quantity,
         price,
@@ -31,6 +31,7 @@ const createProduct = async (req, res) => {
       const createdProduct = await product.save();
   
       res.status(201).json(createdProduct);
+      console.log('posted')
     } catch (error) {
       res.status(500).json({ error: "Failed to create product" });
     }
@@ -69,7 +70,7 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const {
-       name,
+       productName,
         description,
         quantity,
         price,
@@ -82,7 +83,7 @@ const updateProduct = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
       {
-         name,
+         productName,
         description,
         quantity,
         price,
