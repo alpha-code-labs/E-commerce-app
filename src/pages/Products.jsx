@@ -5,7 +5,8 @@ import axios from 'axios'
 
 
 export default function Products(props){
-  //  const productList = props.productList
+    //change to const
+    var productList = props.productList
 
   
 
@@ -14,7 +15,7 @@ export default function Products(props){
     const products = [{category:'Fashion', name:'color eye lens'}, {category:'electronics and stuff', name:'Refrigerator'}, {category:'fashion', name:'Maskara'}, {category:'electronics', name:'Air Congitioner'}, {category:'fashion', name:'Lipstick'}, {category:'sports', name:'Badminton Racket'}]
 
     //temporary arrangement
-    const productList = products
+     //const productList = products
 
     useEffect(()=>{
         if(!productList){
