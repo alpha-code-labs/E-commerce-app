@@ -7,7 +7,7 @@ export default function DisplaySearchedProducts(props){
     return(
     <>
         <div className="flex flex-wrap gap-6 p-4 ">
-            {products.map(product=> <Product/>)}
+            {products.map(product=> <Product productData={product}/>)}
         </div>
     </>
     )
