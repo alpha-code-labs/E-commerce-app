@@ -23,8 +23,9 @@ export default function DisplayDefaultPoducts(props){
 
     return(
         <>
-            <DisplayGroup/>
-            <DisplayGroup/>
+            <div className="w-full min-h-full bg-slate-200 pb-4 pl-4 mt-0 box-border">
+                {productGroups.map(group=><DisplayGroup groupData={group}/>)}
+            </div>
         </>
     )
 
