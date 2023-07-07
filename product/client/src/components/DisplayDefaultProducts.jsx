@@ -10,7 +10,7 @@ export default function DisplayDefaultPoducts(props){
     const categories = new Set()
     extractedCategories.forEach(category => categories.add(category));
 
-    //make seprate group of products based on categories format array of {category:'category_name', products: [p1, p2,..]}
+    //make seprate group of products based on categories. format-> array of {category:'category_name', products: [p1, p2,..]}
 
     let productGroups = []
 
@@ -23,8 +23,8 @@ export default function DisplayDefaultPoducts(props){
 
     return(
         <>
-            <div className="w-full min-h-full bg-slate-200 pb-4 pl-4 mt-0 box-border">
-                {productGroups.map(group=><DisplayGroup groupData={group}/>)}
+            <div className="w-full min-h-full pb-4 pl-4 mt-0 box-border">
+                {productGroups.map((group, i)=><DisplayGroup key={i} groupData={group}/>)}
             </div>
         </>
     )

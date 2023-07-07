@@ -5,14 +5,14 @@ export default function DisplayGroup(props){
 
     const groupData = props.groupData
     const category = groupData.category 
-   const products = [1,2,3,4,5,7,8,9,10]
+   const products = groupData.products
 
     return(
     <>
-    <div className="outer_wrapper box-border p-2 w-full h-[360px] mt-6 bg-white">
-        <div className="groupCategory text-3xl mb-4">{titleCase(category)}</div>
-        <div className='group_container w-full h-[300px] flex flex-row space-x-2 overflow-x-scroll overflow-y-hiddden pl-2'>
-            {products.map(product=><Product productData={product} />)}        
+    <div className="outer_wrapper box-border p-2 w-full h-[360px] mt-6 bg-white drop-shadow-md">
+        <div className="groupCategory mb-4 text-2xl bg-gradient-to-tr from-indigo-600 to-teal-200 bg-clip-text text-transparent hover:cursor-pointer">{titleCase(category)}</div>
+        <div className='group_container w-full h-[300px] flex flex-row space-x-4 overflow-x-scroll overflow-y-hiddden pl-2'>
+            {products.map((product, i)=><Product key={i} productData={product} />)}        
         </div>
         </div>
     </>
