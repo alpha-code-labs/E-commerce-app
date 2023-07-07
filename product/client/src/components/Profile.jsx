@@ -1,9 +1,13 @@
-import Button from "./common/Button";
-
+import Button from "./common/Button"
+import Wishlist from "./Wishlist"
+import {useState} from 'react'
 export default function Profile(props){
     
     const username = 'Username' //update with props or something
     const address = 'Rider House, Sector-44, Gurugram Haryana'
+    const [showWishlist, setShowWishlist] = useState(false)
+    const [showCart, setShowCart] = useState(false)
+    const [showOrders, setShowOrders] = useState(false)
 
     //Logout onClick method
     const logout = (e)=>{
@@ -11,14 +15,23 @@ export default function Profile(props){
 
     //Wishlist onClick method
     const onWishlistClick = (e)=>{
+        setShowWishlist(true)
+        setShowCart(false)
+        setShowOrders(false)
     }
 
     //Cart onClick method
     const onCartClick = (e)=>{
+        setShowWishlist(false)
+        setShowCart(true)
+        setShowOrders(false)
     }
 
     //Orders onClic method
     const onOrdersClick = (e)=>{
+        setShowWishlist(false)
+        setShowCart(false)
+        setShowOrders(true)
     }
 
     return(
@@ -44,6 +57,10 @@ export default function Profile(props){
                         <Button buttonText='Cart' onClick={onCartClick}/>
                         <Button buttonText='Orders' onClick={onOrdersClick}/>
                     </div>
+                </div>
+
+                <div className='wrapper w-full h-full px-4 pt-7'>
+                    {showWishlist && <Wishlist/>}
                 </div>
             </div>
 

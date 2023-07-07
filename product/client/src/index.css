@@ -23,3 +23,26 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+
+.tooltip {
+    position: relative;
+    display: inline-block; /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    color: #141414;
+    text-align: center;
+    margin-top:25px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+  
