@@ -49,10 +49,11 @@
 
   .arrow-down {
     margin:auto;
+    margin-top:-5px;
     width: 0; 
     height: 0; 
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
     
-    border-top: 10px solid rgb(59, 130, 246);
+    border-bottom: 5px solid white;
   }

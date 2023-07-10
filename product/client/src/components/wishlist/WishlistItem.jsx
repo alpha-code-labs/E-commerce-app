@@ -9,6 +9,7 @@ export default function WishlistItem(props){
     const deleteWishlistItem = props.deleteItem
     const productName = props.productName
     const productPrice = props.productPrice
+    const productId = props.productId
 
     return(
         <>
@@ -16,17 +17,17 @@ export default function WishlistItem(props){
                     <div className='product_wrapper flex'>
                         <div className='w-[60px] h-[60px] bg-sky-100' ></div>
                         <div className="flex w-[220px] flex-col px-4 py-2 ">
-                            <div className="text-base">{productName}</div>
+                            <div className="text-base whitespace-nowrap truncate">{productName}</div>
                             <div className="text-sm">
                                     &#8377; {productPrice}
                             </div>
                         </div>
                     </div>
                     <div className='flex box-border h-[60px] border-l pt-4 pl-2 space-x-7'>
-                        <div className="cart cursor-pointer" onClick={addToCart}>
+                        <div className="cart cursor-pointer" onClick={()=>addToCart(productId)}>
                             <img className='w-[25px] h-[25px]' src={cart_icon}/>
                         </div>
-                        <div className="delete cursor-pointer" onClick={deleteWishlistItem}>
+                        <div className="delete cursor-pointer" onClick={()=>deleteWishlistItem(productId)}>
                             <img className='w-[20px] h-[25px]' src={delete_icon}/>
                         </div>
                     </div>

@@ -8,44 +8,51 @@ import axios from 'axios'
 
 export default function Products(props){
     //change to const
-    var productList = props.productList
+    var productList = null
 
   
 
     const [defaultProductList, setDefaultProducts] = useState(null) 
     const productListUrl = 'http://localhost:8000/inventory/api/products'
-    const [showProfile, setShowProfile] = useState(true)
-
-    // const products = [{category:'Fashion', name:'color eye lens'}, {category:'electronics and stuff', name:'Refrigerator'}, {category:'fashion', name:'Maskara'}, {category:'electronics', name:'Air Congitioner'}, {category:'fashion', name:'Lipstick'}, {category:'sports', name:'Badminton Racket'}]
-
-    //temporary arrangement
-     //const productList = products
+    const [showProfile, setShowProfile] = useState(true) 
+    const [showDefault, setShowDefault] = useState(true)
 
      const onSearchBarChange = (e)=>{
         console.log(e.target.value)
+
+        //needs fix...
+        
+        if(defaultProductList.length !== 0){
+            productList = defaultProductList.filter(product=>{
+                console.log(product.name)
+                return product.name.toLowerCase().includes(e.target.value)
+            })
+
+            console.log(productList)
+
+            if(productList.length = 0){
+                setShowEmptyMessage(true)
+            }
+    
+            if(e.target.value.length !== 0) setShowDefault(false)
+            else setShowDefault(true)
+        } 
      }
 
     useEffect(()=>{
-        if(!productList){
-            axios.get(productListUrl).then((response)=>{
-                setDefaultProducts(response.data)
-                console.log(response.data)
-            })
-
-            //temporary arrangement
-            //setDefaultProducts(products)
-        }
-        
+        axios.get(productListUrl).then((response)=>{
+            setDefaultProducts(response.data)
+            console.log(response.data)
+        })
 
     },[])
 
-    
 
     return(
     <>
         {!showProfile && <Navbar onChange={onSearchBarChange}/>}
-        {!showProfile && productList && <DisplaySearchedProducts products={productList}/>}
-        {!showProfile && defaultProductList && <DisplayDefaultProducts products={defaultProductList} />}
+        {!showProfile && !showDefault && productList && <DisplaySearchedProducts products={productList}/>}
+        {!showProfile && showDefault && defaultProductList && <DisplayDefaultProducts products={defaultProductList} />}
 
 
         {showProfile && <Profile/>}

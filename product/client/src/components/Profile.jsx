@@ -73,7 +73,7 @@ export default function Profile(props){
                     </div>
                 </div>
 
-                <div className='wrapper w-full h-full px-4 pt-7'>
+                <div className='wrapper w-full min-h-full px-4 pt-7 overflow-scroll'>
                     {showWishlist && <Wishlist/>}
                     {showCart && <Cart/>}
                 </div>
