@@ -1,12 +1,12 @@
-import cart_icon from '../assets/cart.png'
-import delete_icon from '../assets/delete.png'
+import cart_icon from '../../assets/cart.png'
+import delete_icon from '../../assets/delete.png'
 
 export default function WishlistItem(props){
 
     console.log('wishlist called')
 
     const addToCart = props.addToCart
-    const deleteItem = props.deleteItem
+    const deleteWishlistItem = props.deleteItem
     const productName = props.productName
     const productPrice = props.productPrice
 
@@ -26,7 +26,7 @@ export default function WishlistItem(props){
                         <div className="cart cursor-pointer" onClick={addToCart}>
                             <img className='w-[25px] h-[25px]' src={cart_icon}/>
                         </div>
-                        <div className="delete cursor-pointer" onClick={deleteItem}>
+                        <div className="delete cursor-pointer" onClick={deleteWishlistItem}>
                             <img className='w-[20px] h-[25px]' src={delete_icon}/>
                         </div>
                     </div>

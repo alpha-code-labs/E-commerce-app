@@ -1,5 +1,6 @@
 import Button from "./common/Button"
-import Wishlist from "./Wishlist"
+import Wishlist from "./wishlist/Wishlist"
+import Cart from "./cart/Cart"
 import {useState} from 'react'
 export default function Profile(props){
     
@@ -52,19 +53,31 @@ export default function Profile(props){
                 </div>
 
                 <div className="other_section w-full h-full mt-4 px-4 shadow-inner">
-                    <div className="max-w-sm h-100px flex space-x-2">
-                        <Button buttonText='Wishlist' onClick={onWishlistClick}/>
-                        <Button buttonText='Cart' onClick={onCartClick}/>
-                        <Button buttonText='Orders' onClick={onOrdersClick}/>
+                    <div className="max-w-sm h-100px flex gap-2">
+                        
+                        <div className="flex flex-col justify-middle">
+                            <Button buttonText='Wishlist' onClick={onWishlistClick}/>
+                            {showWishlist && <span className='arrow-down'></span>}
+                        </div>
+
+                        <div className="flex flex-col justify-middle">
+                            <Button buttonText='Cart' onClick={onCartClick}/>
+                            {showCart && <span className='arrow-down'></span>}
+                        </div>
+
+                        <div className="flex flex-col justify-middle">
+                            <Button buttonText='Orders' onClick={onOrdersClick}/>
+                            {showOrders && <span className='arrow-down'></span>}
+                        </div>
+
                     </div>
                 </div>
 
                 <div className='wrapper w-full h-full px-4 pt-7'>
                     {showWishlist && <Wishlist/>}
+                    {showCart && <Cart/>}
                 </div>
-            </div>
-
-            
+            </div>           
         </div>
     </>
     )

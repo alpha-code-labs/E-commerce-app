@@ -4,11 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-<<<<<<< HEAD
     "start": "vite",
-=======
     "dev": "vite",
->>>>>>> fc0dd7a055385bdcfe6e9bb41e160518dc3173ea
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

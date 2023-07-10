@@ -1,9 +1,9 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import WishlistItem from './WishlistItem'
+import CartItem from './CartItem'
+import Button from '../common/Button'
 
-
-export default function Wishlist(){
+export default function Cart(){
     
     const [products, setProducts] =  useState(null)
     const url = 'http://localhost:8000/wishlist/api/getall/:userId'
@@ -20,15 +20,8 @@ export default function Wishlist(){
         }).catch(err=>{console.log(err)})
     },[])
 
-    const addToCart = ()=>{
-
-        //write code for removing item from backend
-        //once done refetch the products data and set Products state variable
-
-    }
-
-    const deleteItem = ()=>{
-        //write code for removing item from backend
+    const deleteCartItem = ()=>{
+        //write code for removing item from Cart backend
         //once done refetch the products data and set Products state variable
     }
 
@@ -38,16 +31,17 @@ export default function Wishlist(){
                 {products && products.map(product=>{
                     
                     console.log(product)
-                    return (<WishlistItem 
+                    return (<CartItem 
                         productName={product.name}
                         productPrice={product.price}
-                        addToCart = {addToCart}
-                        deleteItem = {deleteItem}
+                        deleteItem = {deleteCartItem}
                     />)
                 })}
+
+                <div className='w-[340px]'>
+                    <Button buttonText='Place Order'/>
+                </div>
             </div>
         </>
     )
-
-
 }
