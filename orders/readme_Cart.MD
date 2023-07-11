@@ -6,13 +6,17 @@ TIP -
   ALL ROUTES ARE THROUGH API GATEWAY --USE API GATEWAY OR UPDATE ROUTES ACCORDINGLY
 
 1//create a cart
+```
 POST http://localhost:8000/cart/api/create
+```
+```
 {
   "userId": "64a2beda542569a29ef0b719"
 }
 
-
+```
 STATUS--------------201
+```
 {
     "message": "Cart created",
     "cart": {
@@ -22,16 +26,20 @@ STATUS--------------201
         "__v": 0
     }
 }
-
+```
 2// Create a new cart item
+```
 POSThttp://localhost:8000/cart/api/createcartitem
-
+```
+```
 {
   "userId": "64a2beda542569a29ef0b719",
   "productId": "64a52a55c2c314230fd5f47c",
   "quantity": 2
 }
+```
 STATUS----------- 201
+```
 {
     "message": "Cart item created",
     "cart": {
@@ -47,11 +55,13 @@ STATUS----------- 201
         "__v": 1
     }
 }
-
+```
 3// Get cart items for a user
+```
 GET http://localhost:8000/cart/api/getcartitems/:userId
-
+```
 -----output
+```
 [
     {
         "_id": "64a7a77e24f5f5762ec553ea",
@@ -66,19 +76,21 @@ GET http://localhost:8000/cart/api/getcartitems/:userId
         "__v": 1
     }
 ]
-
+```
 4 // Update the quantity of a cart item
+```
  PUT http://localhost:8000/cart/api/updatequantity/:userId/:cartItemId
-
+```
  req.body 
+```
  { 
     "userId":"64a6e7aef8abc59599c9aaf0",
    "cartItemId":"64a7a8a0cc5140fca54455cb",
     "quantity":"2" 
 }
-
+```
 output.body
-
+```
  {
     "message": "Cart item quantity updated",
     "cart": {
@@ -94,11 +106,13 @@ output.body
         "__v": 1
     }
 }
-
+```
 5  // Remove a cart item
+```
 DELETE http://localhost:8000/cart/api/removecartitem/:userId/:cartItemId
-
+```
 output.body-------------
+```
 {
     "message": "Cart item removed",
     "cart": {
@@ -114,3 +128,4 @@ output.body-------------
         "__v": 3
     }
 }
+```
