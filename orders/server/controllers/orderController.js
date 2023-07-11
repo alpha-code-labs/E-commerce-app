@@ -1,6 +1,5 @@
 import Order from '../models/orderSchema.js';
 import Cart from '../models/cartSchema.js';
-import { getCartItems } from './cartControllers.js';
 import axios from 'axios';
 
 // Create a new order
