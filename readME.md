@@ -2,9 +2,12 @@
 
 -CART AND ORDER MICROSERVICES ARE COMBINED TOGETHER TO MAKE THE ROUTES WORK.
 // Create a new order
-POST http://localhost:8000/orders/api/createOrder
+
+POST 
+``` http://localhost:8000/orders/api/createOrder ```
 
 req.body------------
+```
 {
   "userId": "64a2beda542569a29ef0b719",
   "cartId": "64a69d76bcc598ca462fb34a",
@@ -13,8 +16,10 @@ req.body------------
   "email": "sumesh@gmail.com",
   "additionalNotes": "Give it to watchman"
 }
+```
 
 output -----------------
+```
 {
     "message": "Order created",
     "order": {
@@ -30,10 +35,12 @@ output -----------------
         "__v": 0
     }
 }
-
+```
 // Get order details
+```
 GET http://localhost:8000/orders/api/:orderid
-
+```
+```
 {
     "orderId": "64ad2dad5f31efcdb138cfe0",
     "orderStatus": "Placed",
@@ -43,4 +50,4 @@ GET http://localhost:8000/orders/api/:orderid
     "email": "example@example.com",
     "additionalNotes": "Optional additional notes"
 }
-
+```
