@@ -16,9 +16,9 @@ app.use(cors());
 const PORT = process.env.PORT || 9002;
 const MONGO_URI = process.env.MONGO_URI;
 
-app.use('/api', cartRoutes);
-app.use('/api', orderRoutes );
-app.use('/api',WishlistRoutes)
+app.use('/cart', cartRoutes);
+app.use('/order', orderRoutes );
+app.use('/wishlist',WishlistRoutes)
 app.use(errorHandler);
 
 // app.use('/',(req,res,next)=>{
