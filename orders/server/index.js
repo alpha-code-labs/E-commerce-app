@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js';
+import WishlistRoutes from './routes/wishlistRoutes.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ const MONGO_URI = process.env.MONGO_URI;
 
 app.use('/api', cartRoutes);
 app.use('/api', orderRoutes );
+app.use('/api',WishlistRoutes)
+app.use(errorHandler);
 
 // app.use('/',(req,res,next)=>{
 //   return res.status(200).json({'msg': 'Hello from orders'})
