@@ -37,6 +37,16 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    suppliers: {
+      adminUsername: {
+        type: String,
+        required: true,
+      },
+      adminEmail: {
+        type: String,
+        required: true,
+      },
+    },
 });
 
 const Product = mongoose.model("Product", productSchema);

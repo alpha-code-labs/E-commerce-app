@@ -8,12 +8,9 @@ const AddProduct = () => {
     <>
     
       <Navbar />
-
        <main>
-       <AddProductTem/>
-        <ShowProduct />
-        {/* <ShowProduct />
-        <ShowProduct /> */}
+       <AddProductTem />
+      <ShowProduct />
       </main>
     </>
   );

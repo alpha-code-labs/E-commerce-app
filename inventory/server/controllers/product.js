@@ -2,45 +2,68 @@ import Product from '../model/productSchema.js';
 
 
 
-
-// Create a new product
 const createProduct = async (req, res) => {
-    try {
-      const {
-        productName,
-        description,
-        quantity,
-        price,
-        category,
-        image,
-        available, 
-        supplier
-      } = req.body;
-  
-      const product = new Product({
-        productName,
-        description,
-        quantity,
-        price,
-        category,
-        image,
-        available,
-        supplier
-      });
-  
-      const createdProduct = await product.save();
-  
-      res.status(201).json(createdProduct);
-      console.log('posted')
-    } catch (error) {
-      res.status(500).json({ error: "Failed to create product" });
-    }
-  };
-  
-// Get all products
+  try {
+    const {
+      productName,
+      description,
+      quantity,
+      price,
+      category,
+      image,
+      available, 
+      supplier
+    } = req.body;
+
+    // Get the admin username from the request object (assuming it is set in the verifyAdmin middleware)
+    const { username ,email} = req;
+
+    const product = new Product({
+      productName,
+      description,
+      quantity,
+      price,
+      category,
+      image,
+      available,
+      supplier,
+      suppliers: {
+        adminUsername: username,
+        adminEmail: email,
+      },
+    });
+
+    const createdProduct = await product.save();
+
+    res.status(201).json(createdProduct);
+    console.log('posted')
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create product" });
+  }
+};
+
+
+
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const email = req.email; // Get the admin email from the request object
+    console.log(email ,'from get product')
+
+    // Find the products where the supplier's adminEmail matches the admin's email
+    const products = await Product.find({ 'suppliers.adminEmail': email });
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+};
+const getAllProductsforConsumers = async (req, res) => {
+  try {
+    const email = req.email; // Get the admin email from the request object
+    console.log(email ,'from get product')
+
+    // Find the products where the supplier's adminEmail matches the admin's email
+    const products = await Product.find({});
 
     res.status(200).json(products);
   } catch (error) {
@@ -122,4 +145,4 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-export { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct };
+export { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct ,getAllProductsforConsumers};

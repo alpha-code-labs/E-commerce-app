@@ -1,19 +1,29 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../../api/api';
 
-// Create an async thunk for posting the product data
 export const postProduct = createAsyncThunk(
   'products/postProduct',
-  
-  async (productData) => {
-    try{const response = await api.post('/create', productData);
-    return response.data;}catch(error){
-      console.error(error)
+  async (productData, { getState }) => {
+    try {
+      const { token } = getState().auth;
+      console.log(token,'from slicer');
 
+      // Include the token in the request headers
+      const response = await api.post('/create', productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-    
   }
 );
+
+
 
 // Create the product slice
 const productSlice = createSlice({
@@ -40,6 +50,3 @@ const productSlice = createSlice({
 });
 
 export default productSlice.reducer;
-
-
-// Rest of the code...

@@ -10,9 +10,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// app.use('/',(req,res,next)=>{
-//   return res.status(200).json({'msg': 'Hello from inventory'})
-// })
+// Middleware to retrieve the token from the request headers
+app.use('/api', (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1]; 
+  next();
+});
 
 app.use('/api', productRoutes)
 

@@ -3,9 +3,17 @@ import api from '../../../api/api';
 
 export const deleteProduct = createAsyncThunk(
   'showProduct/deleteProduct',
-  async (productId, { dispatch }) => {
+  async (productId, { dispatch,getState }) => {
     try {
-      await api.delete(`/products/${productId}`);
+      const { token } = getState().auth;
+      console.log(token,'from slicer delete'); // Log the token value
+
+      
+      await api.delete(`/products/${productId}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(deleteProductSuccess(productId));
     } catch (error) {
       dispatch(deleteProductFailure(error.message));
@@ -15,10 +23,15 @@ export const deleteProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   'showProduct/updateProduct',
-  async (productData, { dispatch }) => {
+  async (productData, { dispatch,getState }) => {
     try {
+      const { token } = getState().auth;
         console.log('Update Product Request:', productData);
-      const response = await api.put(`/products/${productData._id}`, productData);
+      const response = await api.put(`/products/${productData._id}`, productData,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(updateProductSuccess(response.data));
       console.log('Update Product Response:', response.data); 
       
@@ -30,9 +43,15 @@ export const updateProduct = createAsyncThunk(
 
 export const fetchProduct = createAsyncThunk(
   'showProduct/fetchProduct',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
-      const response = await api.get('/products');
+      const { token } = getState().auth;
+      console.log(token,'fetch'); // Log the token value
+      const response = await api.get('/products', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

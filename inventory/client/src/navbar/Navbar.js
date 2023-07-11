@@ -1,8 +1,23 @@
 
 
 import React from 'react';
+import { useDispatch } from "react-redux";
+import { logout } from "../api/authSlice";
 
 const Navbar = () => {
+  function redirectToLoginPage() {
+    const url = `http://localhost:3001/login`;
+    window.location.href = url;
+  }
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    // Dispatch the logout action
+    dispatch(logout());
+    localStorage.removeItem('token');
+    const url = `http://localhost:3001/login`;
+    window.location.href = url;
+  };
   return (
     <>
       {/* <!-- Header --> */}
@@ -79,11 +94,11 @@ const Navbar = () => {
                 </ul>
 
                 <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
-                  <h1 className="text-text-gray-600 py-2 hover:cursor-pointer hover:text-indigo-600">
-                    LOGIN
+                  <h1 onClick={handleLogout} className="text-text-gray-600 py-2 hover:cursor-pointer hover:text-indigo-600" >
+                    LOGOUT
                   </h1>
-                  <h1 className="text-text-gray-600 py-2 hover:cursor-pointer px-4 rounded text-white bg-gradient-to-tr from-blue-500 to-teal-200 hover:shadow-lg">
-                    SIGNUP
+                  <h1 onClick={redirectToLoginPage} className="text-text-gray-600 py-2 hover:cursor-pointer px-4 rounded text-white bg-gradient-to-tr from-blue-500 to-teal-200 hover:shadow-lg">
+                    LOGIN
                   </h1>
                 </div>
               </div>
@@ -96,113 +111,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-
-// const Header = () => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-//   const toggleMenu = () => {
-//     setIsMenuOpen(!isMenuOpen);
-//   };
-
-//   return (
-//     <>
-//       {/* <!-- Header --> */}
-//       <header>
-//         {/* <!-- navbar and menu --> */}
-//         <nav className="shadow">
-//           <div className="flex justify-between items-center py-6 px-10 container mx-auto">
-//             <div>
-//               <h1 className="text-2xl font-bold bg-gradient-to-tr from-indigo-600 to-teal-200 bg-clip-text text-transparent hover:cursor-pointer">
-//                 ShopXpress
-//               </h1>
-//             </div>
-
-//             <div>
-//               <div
-//                 className="hover:cursor-pointer sm:hidden"
-//                 onClick={toggleMenu}
-//               >
-//                 <span className="h-1 rounded-full block w-8 mb-1 bg-gradient-to-tr from-indigo-600 to-teal-200"></span>
-//                 <span className="h-1 rounded-full block w-8 mb-1 bg-gradient-to-tr from-indigo-600 to-teal-200"></span>
-//                 <span className="h-1 rounded-full block w-8 mb-1 bg-gradient-to-tr from-indigo-600 to-teal-200"></span>
-//               </div>
-
-//               <div className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden`}>
-//                 <ul className="space-y-4">
-//                   <li>
-//                     <a
-//                       href="#d"
-//                       className="text-gray-700 hover:text-blue-900 text-md relative group block"
-//                     >
-//                       Home
-//                       <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-gradient-to-tr from-teal-200 to-blue-600 rounded-full transform translate-y-2 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
-//                     </a>
-//                   </li>
-//                   <li>
-//                     <a
-//                       href="#dd"
-//                       className="text-gray-700 hover:text-blue-900 text-md relative group block"
-//                     >
-//                       About
-//                       <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-gradient-to-tr from-teal-200 to-blue-600 rounded-full transform translate-y-2 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
-//                     </a>
-//                   </li>
-//                   <li>
-//                     <a
-//                       href="#d"
-//                       className="text-gray-700 hover:text-blue-900 text-md relative group block"
-//                     >
-//                       Services
-//                       <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-gradient-to-tr from-teal-200 to-blue-600 rounded-full transform translate-y-2 scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
-//                     </a>
-//                   </li>
-//                   <li>
-//                     <a
-//                       href="#d"
-//                       className="text-gray-700 hover:text-blue-900 text-md relative block"
-//                     >
-//                       Products
-//                     </a>
-//                   </li>
-//                   <li>
-//                     <a
-//                       href="#d"
-//                       className="text-gray-700 hover:text-blue-900 text-md relative block"
-//                     >
-//                       Contact
-//                     </a>
-//                   </li>
-//                 </ul>
-//               </div>
-
-//               <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
-//                 <h1 className="text-text-gray-600 py-2 hover:cursor-pointer hover:text-indigo-600">
-//                   LOGIN
-//                 </h1>
-//                 <h1 className="text-text-gray-600 py-2 hover:cursor-pointer px-4 rounded text-white bg-gradient-to-tr from-blue-500 to-teal-200 hover:shadow-lg">
-//                   SIGNUP
-//                 </h1>
-//               </div>
-//             </div>
-//           </div>
-//         </nav>
-//       </header>
-//     </>
-//   );
-// };
-
-// export default Header;
-
-
-
-
-
-

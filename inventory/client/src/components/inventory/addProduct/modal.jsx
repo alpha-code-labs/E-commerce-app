@@ -1,11 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { Modal, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { postProduct } from './addProductSlice';
 import { Image,CloudinaryContext } from 'cloudinary-react';
+import axios from 'axios';
+import {setToken} from '../../../api/authSlice';
 
 
-const ProductModal = ({ open, onClose }) => {
+
+
+const ProductModal = ({ open, onClose}) => {
+  const dispatch = useDispatch();
+  
+  
+  
+  //-------------
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const token = new URLSearchParams(window.location.search).get('token');
+        console.log('Token:', token);
+  
+        const tokenPayload = token.split('.')[1];
+        const decodedPayload = window.atob(tokenPayload);
+        console.log(decodedPayload);
+  
+        const parsedPayload = JSON.parse(decodedPayload);
+        console.log('Decoded Token:', parsedPayload);
+  
+        if (token) {
+          const response = await axios.get('http://localhost:9002/api/admin/admin', {
+          // const response = await axios.get('http://localhost:8000/admin/api/admin/admin', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          console.log(`Bearer ${token}`);
+  
+          const adminData = response.data;
+          console.log('Admin Details:', adminData);
+  
+          // Dispatch the setToken action to store the token in Redux store
+          dispatch(setToken(token));
+        }
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      }
+    };
+  
+    fetchAdminData();
+  }, [dispatch]);
+  
+  //-------------
 
     const [product, setProduct] = useState({
     image: '',
@@ -17,7 +65,7 @@ const ProductModal = ({ open, onClose }) => {
     supplier:'',
     available:false
   });
-  const dispatch = useDispatch();
+  
   
 
   const handleInputChange = (e) => {
@@ -28,11 +76,13 @@ const ProductModal = ({ open, onClose }) => {
     }));
   };
 
-
+  
+  
+  
   const handleAddProduct = () => {
     // Dispatch the postProduct action
     dispatch(postProduct(product));
-
+  
     // Reset the form and close the modal
     setProduct({
       image: '',
@@ -41,26 +91,14 @@ const ProductModal = ({ open, onClose }) => {
       quantity: 0,
       category: '',
       price: 0,
-      supplier:'',
-      available:false
+      supplier: '',
+      available: false,
     });
+  
     onClose();
   };
 
-  
-  // const handleImageUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   const reader = new FileReader();
-  
-  //   reader.onload = (e) => {
-  //     setProduct((prevProduct) => ({
-  //       ...prevProduct,
-  //       image: e.target.result,
-  //     }));
-  //   };
-  
-  //   reader.readAsDataURL(file);
-  // };
+
   
 
   const handleImageUpload = (e) => {
@@ -114,15 +152,6 @@ const ProductModal = ({ open, onClose }) => {
   </div>
 </div>
 
-
-      
-        {/* <div className="image-upload">
-          <img src={product.image} alt="Product" className="w-64 h-64 ml-14 mb-5 mt-5" />
-          <div>
-            <label htmlFor='upload'>Upload</label>
-            <input id='upload' type="file" accept="image/*" onChange={handleImageUpload} className='mb-5 ' hidden />
-          </div>
-        </div> */}
         <div className="flex flex-col items-center">
         <div className="flex mb-5">
 

@@ -1,13 +1,12 @@
-import React from 'react'
-import AddProduct from '../components/inventory/AddProduct'
+import React from 'react';
+import AddProduct from '../components/inventory/AddProduct';
 
 const Inventory = () => {
   return (
     <div>
-        <AddProduct/>
-      
+      <AddProduct  /> 
     </div>
-  )
-}
+  );
+};
 
-export default Inventory
+export default Inventory;

@@ -112,7 +112,7 @@ const Profile = () => {
     </div>
    
 </div>
-    {/* ////profile */}
+    
     </>
   )
 }
