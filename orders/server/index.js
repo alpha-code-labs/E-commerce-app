@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js';
 
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(cors());
 const PORT = process.env.PORT || 9002;
 const MONGO_URI = process.env.MONGO_URI;
 
+app.use('/api', cartRoutes);
 app.use('/api', orderRoutes );
 
 // app.use('/',(req,res,next)=>{

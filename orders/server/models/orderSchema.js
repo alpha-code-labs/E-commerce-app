@@ -10,10 +10,6 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  totalAmount: {
-    type: Number,
-    required: true,
-  },
   paymentStatus: {
     type: String,
     enum: ['Pending', 'Completed'],
@@ -23,11 +19,6 @@ const orderSchema = new mongoose.Schema({
     type: String,
     enum: ['Placed', 'In Transit', 'Failed', 'Delivered'],
     default: 'Placed',
-  },
-  cart: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Cart',
-    required: true,
   },
   shippingAddress: {
     type: String,
@@ -61,7 +52,7 @@ orderSchema.pre('save', async function (next) {
       }
 
       this.totalAmount = totalAmount;
-      this.paymentStatus = 'Pending'; // initial status
+      this.paymentStatus = 'completed'; // initial status
     }
 
     next();

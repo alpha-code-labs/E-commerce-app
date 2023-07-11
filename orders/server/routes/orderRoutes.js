@@ -8,7 +8,7 @@ import {
 const router = express.Router();
 
 // Create a new order
-router.post('/create', createOrder);
+router.post('/createOrder', createOrder);
 
 // Get order details
 router.get('/:orderId', getOrderDetails);

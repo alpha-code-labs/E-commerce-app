@@ -1,4 +1,6 @@
 import Order from '../models/orderSchema.js';
+import Cart from '../models/cartSchema.js';
+import { getCartItems } from './cartControllers.js';
 import axios from 'axios';
 
 // Create a new order
@@ -11,20 +13,21 @@ export const createOrder = async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid input' });
     }
 
-    // Retrieve the cart data from the cart microservice or shared database
-    const cart = await Cart.findById(cartId);
+    // Fetch the cart by cartId from the database
+    const cart = await Cart.findOne({ _id: cartId });
 
     if (!cart) {
       return res.status(404).json({ error: 'Cart not found' });
     }
 
-    // Create the order
+    // Create the order items from the cart items
     const orderItems = cart.items.map(item => ({
       product: item.product,
       quantity: item.quantity,
       price: item.price,
     }));
 
+    // Create the order
     const orderData = {
       userId,
       orderItems,
@@ -34,7 +37,7 @@ export const createOrder = async (req, res, next) => {
       additionalNotes,
     };
 
-    // Save the order to the database using the Order schema
+    // Save the order to the database using the Order model
     const order = new Order(orderData);
     const createdOrder = await order.save();
 
@@ -43,52 +46,6 @@ export const createOrder = async (req, res, next) => {
     next(error);
   }
 };
-
-// // Create a new order
-// export const createOrder = async (req, res, next) => {
-//   try {
-//     const { userId, cartId, shippingAddress, contactNumber, email, additionalNotes } = req.body;
-
-//     // Validate input
-//     if (!userId || !cartId || !shippingAddress || !contactNumber || !email) {
-//       return res.status(400).json({ error: 'Invalid input' });
-//     }
-
-//     // Make a request to the cart microservice to get cart data
-//     const cartResponse = await axios.get(`http://localhost:8001/cart/api/${cartId}`);
-
-//     if (cartResponse.status !== 200) {
-//       return res.status(404).json({ error: 'Cart not found' });
-//     }
-
-//     const cart = cartResponse.data;
-
-//     // Create the order
-//     const orderItems = cart.items.map(item => ({
-//       product: item.product,
-//       quantity: item.quantity,
-//       price: item.product.price,
-//     }));
-
-//     const orderData = {
-//       userId,
-//       orderItems,
-//       shippingAddress,
-//       contactNumber,
-//       email,
-//       additionalNotes,
-//     };
-
-//     // Save the order to the database using the Order schema
-//     const order = new Order(orderData);
-//     const createdOrder = await order.save();
-
-//     res.status(201).json({ message: 'Order created', order: createdOrder });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 
 // Get order details
 export const getOrderDetails = async (req, res, next) => {
@@ -144,3 +101,4 @@ export const cancelOrder = async (req, res, next) => {
     next(error);
   }
 };
+
