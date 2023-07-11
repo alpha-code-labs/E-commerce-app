@@ -1,19 +1,25 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import WishlistItem from './WishlistItem'
+import Loading from '../common/Loading'
 
 
 export default function Wishlist(){
     
     const [products, setProducts] =  useState(null)
+    const [loading, setLoading] = useState(false)
 
     const userId = '64a51fb518b1e50537bde392'
     const wishlistId = '64ababb979f03d27475a9182'
-    const url = `http://localhost:8000/wishlist/api/getall/${userId}`
+    const url = `http://localhost:8000/profile/wishlist/getall/${userId}`
+    const wishlistHost = 'http://localhost:8000/profile/wishlist'
+    const cartHost = "http://localhost:8000/profile/cart"
+    const productHost = "http://localhost:8000/profile/wishlist"
     const productUrl = `http://localhost:8000/inventory/api/product/`
-
+    
 
     const fetchProducts=()=>{
+        setLoading(true)
         axios.get(url).then(response=>{ 
             let fetchedProducts = []
          
@@ -28,10 +34,14 @@ export default function Wishlist(){
 
                 Promise.all(promises).then(()=>{
                     setProducts(fetchedProducts)
+                    setLoading(false)
                 })
             }
 
-            else setProducts(null)
+            else {
+                setProducts(null)
+                setLoading(false)
+            }
 
         }).catch(err=>{console.log(err)})
     } 
@@ -42,38 +52,42 @@ export default function Wishlist(){
 
     const addToCart = (itemId)=>{
 
-        const url = `http://localhost:8000/cart/api/getcartitems/${userId}`
+        const url = `http://localhost:8000/profile/cart/getcartitems/${userId}`
 
-        axios.get('http://localhost:8000/cart/api/getcartitems/64a51fb518b1e50537bde392').then(response=>{
+        axios.get('http://localhost:8000/profile/cart/getcartitems/64a51fb518b1e50537bde392').then(response=>{
             if(response.error){
                 console.log(response.error)
             }
 
             else{
                 console.log('everything looks okay')
-                axios.post('http://localhost:8000/cart/api/createcartitem',{userId:userId, productId: itemId, quantity:1}).then(console.log('item added to cart'))
+                axios.post('http://localhost:8000/profile/cart/createcartitem',{userId:userId, productId: itemId, quantity:1}).then(()=>{
+                    console.log('item added to cart')
+                    deleteWishlistItem(itemId)
+                })
             }
         }).catch(error=>{
             if(error.response.status){
                 //cart doesn't exist. Create a new cart and then add item to it..
 
-                axios.post('http://localhost:8000/cart/api/create', {userId: userId}).then((res)=>{
+                axios.post('http://localhost:8000/profile/cart/create', {userId: userId}).then((res)=>{
                     //now add the current item to it
 
                     if(res.status === 201){
-                        axios.post('http://localhost:8000/cart/api/createcartitem',{userId:userId, productId: itemId, quantity:1}).then(console.log('item added to cart'))
+                        axios.post('http://localhost:8000/profile/cart/createcartitem',{userId:userId, productId: itemId, quantity:1}).then(()=>{
+                            console.log('item added to cart')
+                            deleteWishlistItem(itemId)
+                        })
                     }
                 })
 
             }
         })
-        //write code for adding item to backend
-        //once done refetch the products data and set Products state variable
 
     }
 
     const deleteWishlistItem = (itemId)=>{
-        const url = `http://localhost:8000/wishlist/api/${wishlistId}/items/${itemId}`
+        const url = `http://localhost:8000/profile/wishlist/${wishlistId}/items/${itemId}`
         axios.delete(url).then(()=>{
             console.log('product deleted from cart')
             fetchProducts()
@@ -82,8 +96,8 @@ export default function Wishlist(){
 
     return(
         <>
-            <div className='flex flex-col gap-4 ml-10'>
-                {products && products.map(product=>{
+            <div className='flex flex-col gap-4 ml-10 items-center'>
+                {!loading && products && products.map(product=>{
                     
                     console.log(product)
                     return (
@@ -97,7 +111,8 @@ export default function Wishlist(){
                     )
                 })}
 
-                {!products && <p className='text-xl'>There are no products in your wishlist</p>}
+                {!loading && !products && <p className='text-xl'>There are no products in your wishlist</p>}
+                {loading && <Loading/>}
             </div>
         </>
     )

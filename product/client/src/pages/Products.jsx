@@ -3,6 +3,7 @@ import DisplayDefaultProducts from '../components/DisplayDefaultProducts'
 import DisplaySearchedProducts from '../components/DisplaySearchedProducts'
 import Navbar from '../components/navbar/Navbar'
 import Profile from "../components/Profile"
+import ProductDetails from "../components/productDetails/ProductDetails"
 import axios from 'axios'
 
 
@@ -16,6 +17,12 @@ export default function Products(props){
     const productListUrl = 'http://localhost:8000/inventory/api/products'
     const [showProfile, setShowProfile] = useState(true) 
     const [showDefault, setShowDefault] = useState(true)
+
+    //these state will be used for handling Product Details page
+    const [showProductDetails, setShowProductDetails] = useState(false)
+    const [productId, setProductId] = useState(null)
+    //.......
+
 
      const onSearchBarChange = (e)=>{
         console.log(e.target.value)
@@ -50,12 +57,23 @@ export default function Products(props){
 
     return(
     <>
-        {!showProfile && <Navbar onChange={onSearchBarChange}/>}
-        {!showProfile && !showDefault && productList && <DisplaySearchedProducts products={productList}/>}
-        {!showProfile && showDefault && defaultProductList && <DisplayDefaultProducts products={defaultProductList} />}
+        {!showProfile && <Navbar onChange={onSearchBarChange} />}
+        {!showProfile && !showProductDetails && !showDefault && productList && <DisplaySearchedProducts 
+            setShowProductDetails={setShowProductDetails}
+            setProductId={setProductId}
+            products={productList}/>
+        }
+        {!showProfile && !showProductDetails && showDefault && defaultProductList && <DisplayDefaultProducts 
+            setShowProductDetails={setShowProductDetails}
+            setProductId={setProductId}
+            products={defaultProductList} />
+        }
 
+        {showProfile && !showProductDetails && <Profile />}
 
-        {showProfile && <Profile/>}
+        {showProductDetails && <ProductDetails 
+            productId={productId} 
+            setShowProductDetails={setShowProductDetails} />}
     </>
     )
 }

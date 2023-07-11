@@ -23,6 +23,7 @@ export default function WishlistItem(props){
                             </div>
                         </div>
                     </div>
+
                     <div className='flex box-border h-[60px] border-l pt-4 pl-2 space-x-7'>
                         <div className="cart cursor-pointer" onClick={()=>addToCart(productId)}>
                             <img className='w-[25px] h-[25px]' src={cart_icon}/>

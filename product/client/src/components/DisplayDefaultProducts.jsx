@@ -2,6 +2,8 @@ import DisplayGroup from "./common/DisplayGroup";
 
 export default function DisplayDefaultPoducts(props){
     const products = props.products
+    const setShowProductDetails = props.setShowProductDetails
+    const setProductId = props.setProductId
 
     //extract all categories 
     const extractedCategories = products.map(product=>product.category.toLowerCase())
@@ -24,7 +26,11 @@ export default function DisplayDefaultPoducts(props){
     return(
         <>
             <div className="w-full min-h-full pb-4 pl-4 mt-0 box-border">
-                {productGroups.map((group, i)=><DisplayGroup key={i} groupData={group}/>)}
+                {productGroups.map((group, i)=><DisplayGroup 
+                    key={i}
+                    setShowProductDetails={setShowProductDetails}
+                    setProductId={setProductId} 
+                    groupData={group}/>)}
             </div>
         </>
     )
