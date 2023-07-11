@@ -34,7 +34,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// Admin login
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -54,7 +53,13 @@ export const login = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ email: admin.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const tokenPayload = {
+      email: admin.email,
+      username: admin.username,
+      _id: admin._id,
+    };
+
+    const token = jwt.sign(tokenPayload, '1234', { expiresIn: '1h' });
 
     // Set the token as an HTTP-only cookie
     res.cookie('token', token, { httpOnly: true });

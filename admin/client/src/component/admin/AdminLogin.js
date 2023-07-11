@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -15,8 +14,12 @@ const AdminLogin = () => {
       const response = await axios.post('http://localhost:9002/api/admin/login', { email, password });
 
       // Handle successful login
-      console.log('Login successful', response.data);
-      navigate('/register');
+      console.log('Login successful', response.data.token);
+      document.cookie = `token=${response.data.token}; path=/`; // Set the token as a cookie
+      
+      
+      window.location.href = `http://localhost:3000/?token=${response.data.token}`;
+      
     } catch (error) {
       // Handle login error
       console.error('Login failed', error.response.data);

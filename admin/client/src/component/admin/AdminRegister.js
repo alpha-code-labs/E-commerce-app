@@ -9,7 +9,7 @@ function AdminRegister() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [data, setData] = useState({
-    userName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -33,9 +33,9 @@ function AdminRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { userName, email, password, confirmPassword } = data;
+    const { username, email, password, confirmPassword } = data;
   
-    if (userName && email && password && confirmPassword) {
+    if (username && email && password && confirmPassword) {
       if (password === confirmPassword) {
         try {
           const response = await axios.post('http://localhost:9002/api/admin/signup', data);
@@ -65,15 +65,15 @@ function AdminRegister() {
         <h2 className="text-2xl font-bold mb-4 text-center">Admin Register</h2>
 
         <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-          <label htmlFor="userName" className="text-sm font-medium">
+          <label htmlFor="username" className="text-sm font-medium">
             User Name
           </label>
           <input
             type="text"
-            id="userName"
-            name="userName"
+            id="username"
+            name="username"
             className="border py-2 px-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={data.userName}
+            value={data.username}
             onChange={handleOnChange}
           />
 
