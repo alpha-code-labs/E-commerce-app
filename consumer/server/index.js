@@ -1,23 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { handleAuthenticationError } from './middlewares/verifyToken.js';
-import { errorHandler } from './middlewares/errorHandler.js';
-import customerRoutes from './routes/customerRoutes.js';
 import dotenv from 'dotenv';
+
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use('/api/customer', adminRoutes);
 
-app.use('/api/customer', customerRoutes);
-
-app.use(handleAuthenticationError);
-app.use(errorHandler);
-
-const { PORT, MONGO_URI } = process.env;
+const PORT = process.env.PORT || 9002;
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose
   .connect(MONGO_URI, {
