@@ -18,7 +18,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 app.use('/cart', cartRoutes);
 app.use('/order', orderRoutes );
-app.use('/wishlist',WishlistRoutes)
+app.use('/wishlist', WishlistRoutes);
 app.use(errorHandler);
 
 // app.use('/',(req,res,next)=>{
