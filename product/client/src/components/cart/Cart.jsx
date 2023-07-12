@@ -8,13 +8,12 @@ export default function Cart(props){
     
     const [products, setProducts] =  useState(null)
     const [loading, setLoading] = useState(true)
-    const userId = '64a51fb518b1e50537bde392'
+    const userId = props.userId
     const url = `http://localhost:8000/profile/cart/getcartitems/${userId}`
     const productUrl = `http://localhost:8000/inventory/api/product/`
     const [cartId, setCartId] = useState(null)
     const [grandTotal, setGrandTotal] = useState(0)
     const [orderPlaced, setOrderPlaced] = useState(false)
-    const setOrdersId = props.setOrdersId
 
     const fetchProducts=()=>{
         axios.get(url).then(response=>{ 
@@ -64,17 +63,13 @@ export default function Cart(props){
         })
     }
 
-    const deleteCart = ()=>{
-        let promises = []
-
-        products.forEach(item=>{
+    const deleteCart = async ()=>{
+        for(const item of products){
             const itemId = item.productObjectId
-            promises.push(axios.delete(`http://localhost:8000/profile/cart/removecartitem/${userId}/${itemId}`))
-        })
+            await axios.delete(`http://localhost:8000/profile/cart/removecartitem/${userId}/${itemId}`)
+        }
 
-        Promise.all(promises).then(()=>{
-            console.log('Cart Deleted !')
-        })
+       console.log('Cart Deleted !')
     }
 
     const handleCheckout = ()=>{
@@ -89,7 +84,6 @@ export default function Cart(props){
             additionalNotes: "Give it to watchman"
         }).then((response)=>{
             console.log('ordersId', response.data.order._id)
-            setOrdersId(response.data.order._id)
             deleteCart()
             setOrderPlaced(true)
             setTimeout(()=>{

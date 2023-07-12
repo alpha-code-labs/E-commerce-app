@@ -9,13 +9,16 @@ export default function WishlistItem(props){
     const deleteWishlistItem = props.deleteItem
     const productName = props.productName
     const productPrice = props.productPrice
+    const productImage = props.productImage
     const productId = props.productId
 
     return(
         <>
             <div className='item_wrapper flex border w-[380px] shadow-sm'>
                     <div className='product_wrapper flex'>
-                        <div className='w-[60px] h-[60px] bg-sky-100' ></div>
+                        <div className='w-[60px] h-[60px] bg-sky-100' >
+                            <img className='w-full h-full object-cover' src={productImage} />
+                        </div>
                         <div className="flex w-[220px] flex-col px-4 py-2 ">
                             <div className="text-base whitespace-nowrap truncate">{productName}</div>
                             <div className="text-sm">

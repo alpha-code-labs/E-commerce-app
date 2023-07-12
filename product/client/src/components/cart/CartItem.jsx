@@ -12,6 +12,7 @@ export default function CartItem(props){
     const deleteCartItem = props.deleteItem
     const productName = props.productName
     const productPrice = props.productPrice
+    const productImage = props.productImage
     const productObjectId = props.productObjectId
     const [quantity, setQuantity] = useState(props.productQuantity)
     const setGrandTotal = props.setGrandTotal
@@ -47,7 +48,9 @@ export default function CartItem(props){
                 <div>
                     <div className='item_wrapper flex border w-[384px] shadow-sm'>
                         <div className='product_wrapper flex'>
-                            <div className='w-[60px] h-[60px] bg-sky-100' ></div>
+                            <div className='w-[60px] h-[60px] bg-sky-100' >
+                                <img className='w-full h-full object-cover' src={productImage} />
+                            </div>
                             <div className="flex w-[220px] flex-col px-4 py-2 ">
                                 <div className="text-base whitespace-nowrap truncate">{productName}</div>
                                 <div className="text-sm">
@@ -74,7 +77,7 @@ export default function CartItem(props){
                 </div>
 
                 <div className='flex text-base text-center h-[60px] w-[40px] justify-center items-center'>
-                    <p className='align-middle'>{quantity*productPrice}</p>
+                    <p className='align-middle'>{(quantity*productPrice)}</p>
                 </div>
             </div>
         </>

@@ -1,8 +1,13 @@
 import Button from "../common/Button";
+import icon_profile from "../../assets/avatar_he.jpg"
 
 export default function Navbar(props){
   
+  const loggedIn = props.loggedIn
+  const userData = props.userDaa
   const onChange = props.onChange
+  const setShowProfile = props.setShowProfile
+  const setShowProductDetails = props.setShowProductDetails
 
   return (
     <>
@@ -11,12 +16,17 @@ export default function Navbar(props){
         {/* <!-- navbar and menu --> */}
         <nav className="shadow">
           <div className="flex justify-between items-center py-6 px-10 container mx-auto">
+            
+            {/* <!-- Logo section --> */}
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-tr from-indigo-600 to-teal-200 bg-clip-text text-transparent hover:cursor-pointer">
+              <h1 onClick={()=>{setShowProductDetails(false); setShowProfile(false)}} className="text-2xl font-bold bg-gradient-to-tr from-indigo-600 to-teal-200 bg-clip-text text-transparent hover:cursor-pointer">
                 ShopXpress
               </h1>
             </div>
+             {/* <!-- Logo section ends --> */}
 
+
+  {/* <!-- search and other buttons --> */}
             <div>
               <div className="hover:cursor-pointer sm:hidden">
                 <span className="h-1 rounded-full block w-8 mb-1 bg-gradient-to-tr from-indigo-600 to-teal-200"></span>
@@ -79,9 +89,18 @@ export default function Navbar(props){
                   </li>
                 </ul>
 
+           {/* <!-- Login and Logout buttons --> */}
+
                 <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
-                  <Button buttonText='LOGIN' />
-                  <Button buttonText='SIGN UP' />
+                  {!loggedIn && <Button buttonText='LOGIN' />}
+                  {!loggedIn && <Button buttonText='SIGN UP' />}
+                  {loggedIn  && <div className="cursor-pointer" onClick={()=>{setShowProfile(true); setShowProductDetails(false)}} >
+
+                        <div className="w-[60px] h-[60px]">
+                            <img className="w-full h-full object-cover" src={icon_profile} />
+                        </div>
+
+                    </div>}
                 </div>
               </div>
             </div>

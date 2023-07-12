@@ -3,30 +3,20 @@ import Wishlist from "./wishlist/Wishlist"
 import Cart from "./cart/Cart"
 import {useEffect, useState} from 'react'
 import Orders from "./orders/Orders"
+import icon_logout from '../assets/logout.png'
+
 export default function Profile(props){
     
-    const username = 'Username' //update with props or something
-    const address = 'Rider House, Sector-44, Gurugram Haryana'
+    const username = props.userData.username 
+    const userId = props.userData._id 
+
+    const address = 'Rider House, Sector-44, Gurugram Haryana' //update later
     const [showWishlist, setShowWishlist] = useState(false)
     const [showCart, setShowCart] = useState(false)
     const [showOrders, setShowOrders] = useState(false)
     const [ordersId, setOrdersId] = useState('')
+    const setShowProfile = props.setShowProfile
 
-
-    useEffect(()=>{
-        console.log('orderId changed..', ordersId)
-        if(ordersId!='')
-            localStorage.setItem('orderId', JSON.stringify(ordersId))
-    },[ordersId])
-
-    useEffect(()=>{
-        const id = localStorage.getItem('orderId')
-        console.log('id', id)
-        console.log('order_id', ordersId)
-        if(id && ordersId===''){
-            setOrdersId(id)
-        }
-    },[])
 
     //Logout onClick method
     const logout = (e)=>{
@@ -55,17 +45,25 @@ export default function Profile(props){
 
     return(
     <>
-        <div className="topbar w-full py-6 px-10 flex justify-between item-end shadow">
-                <div className=''/>
+        <div className="topbar w-full py-6 px-10 flex justify-between item-end shadow items-center">
+                <div className=''>
+                    <h1 
+                        onClick={()=>setShowProfile(false)}
+                        className="text-2xl font-bold bg-gradient-to-tr from-indigo-600 to-teal-200 bg-clip-text text-transparent hover:cursor-pointer">
+                        ShopXpress
+                    </h1>
+                </div>
                 <div className="flex space-x-6 align-middle">
-                <p className="align-middle text-base pt-1.5">{username}</p>
-                <Button buttonText='Logout' onClick={logout} />
+                <p className="align-middle text-base">{`Welcome ${username} !`}</p>
+                <div className="w-[25px] h-[25px] cursor-pointer">
+                    <img className="w-full h-full object-cover" src={icon_logout}/>
+                </div>
                 </div>
         </div>
 
         <div className="wrapper w-full h-[calc(100vh-90px)] flex flex-row">
-            <div className="w-[170px] bg-grey-50">
-                <div className="flex-col p-4 flex gap-2">
+            <div className="w-[170px] bg-blue-200">
+                <div className="flex-col px-10 py-5 flex gap-2">
                         
                         <div className="flex flex-col justify-middle">
                             <Button buttonText='Wishlist' onClick={onWishlistClick}/>
@@ -85,12 +83,12 @@ export default function Profile(props){
             </div>
             <div className="w-full p-4">
                 <div className='wrapper w-full min-h-full px-4 pt-7 overflow-scroll'>
-                    {showWishlist && <Wishlist/>}
-                    {showCart && <Cart setOrdersId = {setOrdersId} />}
-                    {showOrders && <Orders ordersId = {ordersId} />}
+                    {showWishlist && <Wishlist userId = {userId} />}
+                    {showCart && <Cart userId = {userId} />}
+                    {showOrders && <Orders userId = {userId} />}
                 </div>
             </div>
-            <div className="w-[180px] bg-sky-200 pr-5 pt-4">
+            <div className="w-[180px] bg-grey-100 pr-5 pt-4 mr-9">
                 <div className="address w-full h-[140px] shadow rounded-md ml-4 mt-4 px-4 py-2 text-sm">
                     <p className="text-sm font-bold">Address:</p>
                     {address.split(',').map((line,i)=>(<p key={i}>{line}</p>))}

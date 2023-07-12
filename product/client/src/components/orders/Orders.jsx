@@ -4,18 +4,16 @@ import Loading from '../common/Loading'
 
 export default function Orders(props){
     
-    const orderId = props.ordersId
+    const userId = props.userId
     const [loading, setLoading] = useState(true)
     const [orderData, setOrderData] = useState(null)
-    const userId = '64a51fb518b1e50537bde392'
-    const url = `http://localhost:8000/profile/orders/${orderId}`
+    const url = `http://localhost:8000/profile/orders2/getAllOrders/${userId}`
     
 
     useEffect(()=>{
-        console.log('orderId', orderId)
         axios.get(url).then(response => {
             setOrderData(response.data)
-            console.log(response.data)
+            console.log('order', response.data)
             setLoading(false)
         })
     },[])

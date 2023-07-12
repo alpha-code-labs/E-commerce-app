@@ -10,13 +10,12 @@ import axios from 'axios'
 export default function Products(props){
     //change to const
     var productList = null
-
-  
-
     const [defaultProductList, setDefaultProducts] = useState(null) 
     const productListUrl = 'http://localhost:8000/inventory/api/products'
-    const [showProfile, setShowProfile] = useState(true) 
+    const [showProfile, setShowProfile] = useState(false) 
     const [showDefault, setShowDefault] = useState(true)
+    const [loggedIn, setLoggedIn] = useState(false)
+    const [userData, setUserData] =  useState(null)
 
     //these state will be used for handling Product Details page
     const [showProductDetails, setShowProductDetails] = useState(false)
@@ -55,9 +54,45 @@ export default function Products(props){
     },[])
 
 
+    const fetchUserData = async ()=>{
+        const token = new URLSearchParams(window.location.search).get('token')
+        console.log(token)
+        const tokenPayload = token.split('.')[1]
+        const decodePayload = window.atob(tokenPayload)
+        console.log(decodePayload)
+
+        if(token){
+
+            console.log('token got inside', token)
+
+            const url = await axios.get('http://localhost:8010/api/customer/customer',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(response=>{
+                console.log('Customer Data', response)
+                setLoggedIn(true)
+                setUserData(response.data)
+            })
+        }
+    }
+
+
+
+    useEffect(()=>{
+        fetchUserData()
+    },[])
+
+
+
     return(
     <>
-        {!showProfile && <Navbar onChange={onSearchBarChange} />}
+        {!showProfile && <Navbar 
+            setShowProductDetails={setShowProductDetails}
+            setShowProfile={setShowProfile} 
+            loggedIn={loggedIn} 
+            userData={userData} 
+            onChange={onSearchBarChange} />}
         {!showProfile && !showProductDetails && !showDefault && productList && <DisplaySearchedProducts 
             setShowProductDetails={setShowProductDetails}
             setProductId={setProductId}
@@ -69,10 +104,13 @@ export default function Products(props){
             products={defaultProductList} />
         }
 
-        {showProfile && !showProductDetails && <Profile />}
+        {showProfile && !showProductDetails && <Profile 
+            userData={userData}
+            setShowProfile={setShowProfile} />}
 
         {showProductDetails && <ProductDetails 
             productId={productId} 
+            userId={userData._id}
             setShowProductDetails={setShowProductDetails} />}
     </>
     )

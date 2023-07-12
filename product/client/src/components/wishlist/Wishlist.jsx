@@ -4,19 +4,19 @@ import WishlistItem from './WishlistItem'
 import Loading from '../common/Loading'
 
 
-export default function Wishlist(){
+export default function Wishlist(props){
     
     const [products, setProducts] =  useState(null)
     const [loading, setLoading] = useState(false)
-
-    const userId = '64a51fb518b1e50537bde392'
-    const wishlistId = '64ababb979f03d27475a9182'
+    const userId = props.userId
+    const [wishlistId, setWishlistId] = useState(null)
     const url = `http://localhost:8000/profile/wishlist/getall/${userId}`
-    const wishlistHost = 'http://localhost:8000/profile/wishlist'
-    const cartHost = "http://localhost:8000/profile/cart"
-    const productHost = "http://localhost:8000/profile/wishlist"
+    //const wishlistHost = 'http://localhost:8000/profile/wishlist'
+    //const cartHost = "http://localhost:8000/profile/cart"
+    //const productHost = "http://localhost:8000/profile/wishlist"
     const productUrl = `http://localhost:8000/inventory/api/product/`
     
+
 
     const fetchProducts=()=>{
         setLoading(true)
@@ -48,6 +48,12 @@ export default function Wishlist(){
 
     useEffect(()=>{
         fetchProducts()
+
+        const url = `http://localhost:8000/profile/wishlist/getwishlists/${userId}`
+        axios.get(url).then(response=>{
+            setWishlistId(response.data[0]._id)
+            console.log(response.data[0]._id, 'wishlist id ')
+        })
     },[])
 
     const addToCart = (itemId)=>{
@@ -104,6 +110,7 @@ export default function Wishlist(){
                     <WishlistItem 
                         productName={product.name}
                         productPrice={product.price}
+                        productImage={product.image}
                         productId={product._id}
                         addToCart = {addToCart}
                         deleteItem = {deleteWishlistItem}
