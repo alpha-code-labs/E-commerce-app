@@ -9,7 +9,6 @@ import axios from 'axios'
 
 export default function Products(props){
     //change to const
-    var productList = null
     const [defaultProductList, setDefaultProducts] = useState(null) 
     const productListUrl = 'http://localhost:8000/inventory/api/products'
     const [showProfile, setShowProfile] = useState(false) 
@@ -20,6 +19,7 @@ export default function Products(props){
     //these state will be used for handling Product Details page
     const [showProductDetails, setShowProductDetails] = useState(false)
     const [productId, setProductId] = useState(null)
+    const [searchedProducts, setSearchedProducts] = useState([])
     //.......
 
 
@@ -29,21 +29,25 @@ export default function Products(props){
         //needs fix...
         
         if(defaultProductList.length !== 0){
-            productList = defaultProductList.filter(product=>{
+            const productList = defaultProductList.filter(product=>{
                 console.log(product.name)
-                return product.name.toLowerCase().includes(e.target.value)
+                console.log(product.name.toLowerCase().includes(e.target.value.toLowerCase()))
+                return product.name.toLowerCase().includes(e.target.value.toLowerCase())
             })
 
-            console.log(productList)
-
-            if(productList.length = 0){
-                setShowEmptyMessage(true)
-            }
+            setSearchedProducts(productList)
     
             if(e.target.value.length !== 0) setShowDefault(false)
             else setShowDefault(true)
         } 
      }
+
+
+    useEffect(()=>{
+        if(searchedProducts.length = 0){
+            setShowEmptyMessage(true)
+        }
+    },[searchedProducts])
 
     useEffect(()=>{
         axios.get(productListUrl).then((response)=>{
@@ -62,7 +66,6 @@ export default function Products(props){
         console.log(decodePayload)
 
         if(token){
-
             console.log('token got inside', token)
 
             const url = await axios.get('http://localhost:8010/api/customer/customer',{
@@ -93,10 +96,10 @@ export default function Products(props){
             loggedIn={loggedIn} 
             userData={userData} 
             onChange={onSearchBarChange} />}
-        {!showProfile && !showProductDetails && !showDefault && productList && <DisplaySearchedProducts 
+        {!showProfile && !showProductDetails && !showDefault && searchedProducts && <DisplaySearchedProducts 
             setShowProductDetails={setShowProductDetails}
             setProductId={setProductId}
-            products={productList}/>
+            products={searchedProducts}/>
         }
         {!showProfile && !showProductDetails && showDefault && defaultProductList && <DisplayDefaultProducts 
             setShowProductDetails={setShowProductDetails}
@@ -110,7 +113,7 @@ export default function Products(props){
 
         {showProductDetails && <ProductDetails 
             productId={productId} 
-            userId={userData._id}
+            userId={userData? userData._id:null}
             setShowProductDetails={setShowProductDetails} />}
     </>
     )

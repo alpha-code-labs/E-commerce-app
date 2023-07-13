@@ -60,7 +60,7 @@ export default function Wishlist(props){
 
         const url = `http://localhost:8000/profile/cart/getcartitems/${userId}`
 
-        axios.get('http://localhost:8000/profile/cart/getcartitems/64a51fb518b1e50537bde392').then(response=>{
+        axios.get(`http://localhost:8000/profile/cart/getcartitems/${userId}`).then(response=>{
             if(response.error){
                 console.log(response.error)
             }

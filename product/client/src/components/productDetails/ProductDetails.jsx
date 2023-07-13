@@ -3,10 +3,10 @@ import ShowLoading from './ShowLoading'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import back_button from '../../assets/back.jpg'
-import icon_cart_filled from '../../assets/cart_filled.svg'
-import icon_cart_unfilled from '../../assets/cart_unfilled.svg'
-import icon_heart_filled from '../../assets/heart_filled.svg'
-import icon_heart_unfilled from '../../assets/heart_unfilled.svg'
+import icon_cart_filled_light from '../../assets/cart_filled_light.svg'
+import icon_cart_unfilled_light from '../../assets/cart_unfilled_light.svg'
+import icon_heart_filled_light from '../../assets/heart_filled_light.svg'
+import icon_heart_unfilled_light from '../../assets/heart_unfilled_light.svg'
 
 export default function ProductDetails(props){
 
@@ -16,11 +16,13 @@ export default function ProductDetails(props){
     const [data, setData] =  useState(null)
     const [inWishlist, setInWishlist] = useState(false)
     const [inCart, setInCart] = useState(false)
+    const [cartItemId, setCartItemId] = useState(null)
     const userId = props.userId
     const itemId = productId
     const url = `http://localhost:8000/inventory/api/product/${productId}`
 
     console.log(props.userId, 'from props-userId')
+
 useEffect(()=>{
         
     axios.get(url).then((response)=>{
@@ -51,11 +53,13 @@ const setCartStatus =()=>{
     const url = `http://localhost:8000/profile/cart/getcartitems/${userId}`
     axios.get(url).then(response=>{
         response.data[0].items.forEach(item=>{
-            if(item.product === productId) setInCart(true)
+            if(item.product === productId) {
+                setInCart(true)
+                setCartItemId(item._id)
+            }
         })
     })
 }
-
 
 const network_setWishlistId =()=>{
     const url = `http://localhost:8000/profile/wishlist/getwishlists/${userId}`
@@ -126,8 +130,9 @@ const addToWishlist = ()=>{
 }
 
 const removeFromCart = ()=>{
-    axios.delete(`http://localhost:8000/profile/cart/removecartitem/${userId}/${productId}`).then(()=>{
-        console.log('product deleted from Cart')    
+    if(!cartItemId) return
+    axios.delete(`http://localhost:8000/profile/cart/removecartitem/${userId}/${cartItemId}`).then(()=>{
+        console.log('product deleted from Cart-poductDetails')    
     })
 }
 
@@ -137,12 +142,6 @@ const removeFromWishlist = ()=>{
         });
 }
 
-
-
-const handleBackButton = ()=>{
-    setShowProductDetails(false)
-}
-
 const handleWishlistClick = ()=>{
     if(inWishlist){
         removeFromWishlist()
@@ -150,6 +149,8 @@ const handleWishlistClick = ()=>{
     }
     else{
         addToWishlist()
+        removeFromCart()
+        setInCart(false)
         setInWishlist(true)
     }
 }
@@ -161,9 +162,12 @@ const handleCartClick=()=>{
     }
     else{
         addToCart()
+        removeFromWishlist()
+        setInWishlist(false)
         setInCart(true)
     }
 }
+
 
 
     return (
@@ -173,6 +177,7 @@ const handleCartClick=()=>{
             <img className='w-[25px] h-[20px]' src={back_button} />
             <p className='text-sm font-bold ml-4 text-slate-800'>Browse Products</p>
     </div>*/}
+
       {!data && <ShowLoading/>}
         
       { data && <div className="box-border text-black flex p-6">
@@ -188,22 +193,24 @@ const handleCartClick=()=>{
                 <div className="text-base">{data.description}</div>
                 <div className="text-xl">{data.price}</div>
               </div>
-              <div className="flex space-x-4">
-                
-                <div className='button flex items-center border pr-1 cursor-pointer hover:border-sky-500 rounded' onClick={handleWishlistClick}>               
-                    <div className='button w-[38px] h-[38px]'>
-                        <img className='w-full h-full object-cover' src={inWishlist? icon_heart_filled : icon_heart_unfilled} />
+                <div className="flex space-x-4 text-gray-800">
+                { userId &&
+                <>
+                    <div className='button flex items-center border pr-1 cursor-pointer hover:border-sky-500 rounded' onClick={handleWishlistClick}>               
+                        <div className='button w-[38px] h-[38px]'>
+                            <img className='w-full h-full object-cover' src={inWishlist? icon_heart_filled_light : icon_heart_unfilled_light} />
+                        </div>
+                        <p className='button_text text-sm font-semibold'>{inWishlist? 'Remove from Wishlist' : 'Add to Wishlist'}</p>
                     </div>
-                    <p className='button_text text-sm font-bold'>{inWishlist? 'Remove from Wishlist' : 'Add to Wishlist'}</p>
-                </div>
 
-                <div className='button flex items-center border pr-1 cursor-pointer hover:border-sky-500 rounded' onClick={handleCartClick}>
-                    <div className='button_icon w-[38px] h-[38px]'>
-                        <img className='w-full h-full object-cover' src={inCart? icon_cart_filled : icon_cart_unfilled} />
+                    <div className='button flex items-center border pr-1 cursor-pointer hover:border-sky-500 rounded' onClick={handleCartClick}>
+                        <div className='button_icon w-[38px] h-[38px]'>
+                            <img className='w-full h-full object-cover' src={inCart? icon_cart_filled_light : icon_cart_unfilled_light} />
+                        </div>
+                        <p className='button_text text-sm font-semibold'>{inCart? 'Remove from Cart' : 'Add to Cart'}</p>
                     </div>
-                    <p className='button_text text-sm font-bold'>{inCart? 'Remove from Cart' : 'Add to Cart'}</p>
-                </div>
-                
+                </>
+                }
               </div>
             </div>
           </div>       

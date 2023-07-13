@@ -15,7 +15,7 @@ export default function Navbar(props){
       <header>
         {/* <!-- navbar and menu --> */}
         <nav className="shadow">
-          <div className="flex justify-between items-center py-6 px-10 container mx-auto">
+          <div className="flex justify-between items-center py-6 px-10 container">
             
             {/* <!-- Logo section --> */}
             <div>
@@ -23,8 +23,17 @@ export default function Navbar(props){
                 ShopXpress
               </h1>
             </div>
-             {/* <!-- Logo section ends --> */}
+            {/* ///Serach */}
+            <div className="bg-white py-3 px-4 w-full rounded-lg flex justify-around items-center relative">
+              <input type="text" placeholder="Search" onChange={onChange} className=" bg-gray-100 rounded-md  outline-none pl-2 ring-indigo-700 w-full mr-2 p-2"/>
+              <span className="absolute right-8 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" height='24px' fill="none" viewBox="0 0 24 24" stroke="currentColor ">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+            </div>
 
+             {/* <!-- Logo section ends --> */}
 
   {/* <!-- search and other buttons --> */}
             <div>
@@ -33,17 +42,8 @@ export default function Navbar(props){
                 <span className="h-1 rounded-full block w-8 mb-1 bg-gradient-to-tr from-indigo-600 to-teal-200"></span>
                 <span className="h-1 rounded-full block w-8 mb-1 bg-gradient-to-tr from-indigo-600 to-teal-200"></span>
               </div>
-              
-              <div className="flex items-center">
+            <div className="flex items-center">
                 <ul className="sm:flex space-x-4 hidden items-center">
-                  <li> <div className="bg-white py-3 px-4 rounded-lg flex justify-around items-center ">
-
-                    {/* ///Serach */}
-   <input type="text" placeholder="Search" onChange={onChange} className=" bg-gray-100 rounded-md  outline-none pl-2 ring-indigo-700 w-full mr-2 p-2"/>
-  <span><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-" fill="none" viewBox="0 0 24 24" stroke="currentColor ">
-  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-</svg></span>
-      </div></li>
                   <li>
                     <a
                       href="#d"
