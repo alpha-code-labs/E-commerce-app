@@ -12,11 +12,13 @@ const CustomerLogin = () => {
     
     try {
       // Perform login API request
-      const response = await axios.post('http://localhost:9004/api/customer/login', { email, password });
+      const response = await axios.post('http://localhost:8010/api/customer/login', { email, password });
 
       // Handle successful login
-      console.log('Login successful', response.data);
-      navigate('/');
+      console.log('Login successful', response.data.token);
+      document.coookie = `token=${response.data.token}; path=/`
+      window.location.href = `http://localhost:5173/?token=${response.data.token}`
+    
     } catch (error) {
       // Handle login error
       console.error('Login failed', error.response.data);

@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post('/signup', signup);
 router.post('/login', login);
+router.get('/customer', verifyToken)
 // router.get('/protected', verifyToken, (req, res) => {
 //     res.redirect('/profile');
 //   });
