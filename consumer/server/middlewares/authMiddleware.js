@@ -1,26 +1,40 @@
 import jwt from 'jsonwebtoken';
+import Customer from '../models/Customer.js';
 
-export const verifyToken = (req, res, next) => {
-  const token = req.cookies.token;
+export const verifyToken = async (req, res, next) => {
+  const token = req.headers.authorization
+
+  console.log('provided token is', token)
 
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
   }
 
-  if (!process.env.JWT_SECRET) {
-    return res.status(500).json({ error: 'JWT secret is missing or not set correctly' });
+  const tokenValue = token.split(' ')[1]
+  console.log(tokenValue)
+
+  //verify and decode token
+  const decodedToken = jwt.verify(tokenValue, process.env.JWT_SECRET)
+
+  //get username, email and id from payload
+  const {email, username, _id} = decodedToken
+
+
+  //find user with provided email
+  const customer = await Customer.findOne({email}) 
+
+  //check for _id
+  console.log(customer,'from backend')
+
+  if(!customer){
+    return res.status(404).json({error : 'Customer not found'})
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-    if (err) {
-      if (err.name === 'TokenExpiredError') {
-        return res.status(401).json({ error: 'Token expired' });
-      } else {
-        return res.status(401).json({ error: 'Invalid token' });
-      }
-    }
+  //suspicious code
+  //Attach the username and _id to the customer object
+  //customer.username = username;
+  //customer._id = _id;
 
-    req.user = decodedToken;
-    next();
-  });
-};
+  //return the customer details
+  return res.status(200).json(customer)
+}

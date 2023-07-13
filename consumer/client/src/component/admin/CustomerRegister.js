@@ -38,7 +38,7 @@ function CustomerRegister() {
     if (username && email && password && confirmPassword) {
       if (password === confirmPassword) {
         try {
-          const response = await axios.post('http://localhost:9004/api/customer/signup', data);
+          const response = await axios.post('http://localhost:8010/api/customer/signup', data);
           console.log('Registration successful', response.data);
           toast.success(response.data.message);
           navigate('/login');
