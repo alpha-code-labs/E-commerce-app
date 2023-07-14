@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
 
+// Original file
+const excelSheetSchema = new mongoose.Schema({
+  data: Buffer,
+  contentType: String, 
+  fileName: String 
+});
+
 const employeeSchema = new mongoose.Schema({
   employeeName: String,
   employeeId: String,
@@ -10,15 +17,8 @@ const employeeSchema = new mongoose.Schema({
   noOfYears: Number
 });
 
-const groupSchema = new mongoose.Schema({
-  employeeName: String,
-  designation: String,
-  department: String,
-  grade: String,
-  noOfYears: Number
-});
-
+const ExcelSheet = mongoose.model('ExcelSheet', excelSheetSchema);
 const Employee = mongoose.model('Employee', employeeSchema);
-const Group = mongoose.model('Group', groupSchema);
 
-export { Employee, Group };
+
+export { ExcelSheet, Employee};

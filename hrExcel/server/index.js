@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import hrDataRoutes from './routes/hrDataRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
 
 dotenv.config();
 
@@ -13,7 +14,8 @@ app.use(cors());
 const PORT = process.env.PORT || 8000;
 const MONGO_URI = process.env.MONGO_URI;
 
-app.use('/api', hrDataRoutes );
+app.use('/hrdata', hrDataRoutes );
+app.use('/groups', groupRoutes)
 
 
 mongoose
