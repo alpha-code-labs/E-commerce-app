@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import xlsx from 'xlsx';
 
 // Original file
 const excelSheetSchema = new mongoose.Schema({
@@ -6,6 +7,18 @@ const excelSheetSchema = new mongoose.Schema({
   contentType: String, 
   fileName: String 
 });
+
+
+const getHeaders = (filePath) => {
+  const workbook = xlsx.readFile(filePath);
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const jsonData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+
+  return jsonData[0];
+};
+
+
 
 const employeeSchema = new mongoose.Schema({
   employeeName: String,
@@ -20,5 +33,4 @@ const employeeSchema = new mongoose.Schema({
 const ExcelSheet = mongoose.model('ExcelSheet', excelSheetSchema);
 const Employee = mongoose.model('Employee', employeeSchema);
 
-
-export { ExcelSheet, Employee};
+export {getHeaders, ExcelSheet, Employee};

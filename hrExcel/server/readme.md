@@ -40,6 +40,18 @@ PUT http://localhost:8004/groups/employees/:employeeId
   "designation": "Board Member and CEO"
 }
 
-// delete an employee
-
- DELETE 
+// get headers from excel data
+get http://localhost:8004/hrdata/employee/headers
+ 
+ {
+    "headers": [
+        "_id",
+        "employeeName",
+        "employeeId",
+        "designation",
+        "department",
+        "costCenter",
+        "noOfYears",
+        "__v"
+    ]
+}

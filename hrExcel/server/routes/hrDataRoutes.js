@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadFile } from '../controllers/hrDataController.js';
+import {getEmployeeHeaders , uploadFile } from '../controllers/hrDataController.js';
 import { Employee } from '../models/hrDataSchema.js';
 
 const router = express.Router();
@@ -14,6 +14,7 @@ const upload = multer({ dest: 'uploads/' });
 // Route for uploading an Excel file
 router.post('/upload', upload.single('file'), uploadFile);
 
+router.get('/employee/headers', getEmployeeHeaders );
 // // Route for extracting data from an Excel file
 // router.post('/extract-data', (req, res) => {
 //   const { filePath } = req.body;
