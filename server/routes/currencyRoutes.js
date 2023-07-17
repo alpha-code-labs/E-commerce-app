@@ -3,9 +3,12 @@ import {
   updateCurrencyRatesEveryHour,
   getLatestCurrencyRates,
   performCurrencyConversion,
+  fetchCurrencyRates
 } from '../controllers/currencyController.js';
 
+
 const router = express.Router();
+router.get('/currency/symbol',fetchCurrencyRates)
 
 router.get('/currency/update', updateCurrencyRatesEveryHour);
 

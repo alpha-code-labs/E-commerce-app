@@ -1,7 +1,7 @@
 
 
 //COnversion from one currency to another 
-post http://localhost:8080/api/currency/convert?from=USD&to=EUR&amount=50
+get http://localhost:8080/api/currency/convert?from=USD&to=EUR&amount=50
 
 
 {

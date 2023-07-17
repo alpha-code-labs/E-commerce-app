@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CurrencyRate from '../models/currencyRate.js';
 
-const YOUR_APP_ID = '2d9c5f3667a14c2d9bcd306987e47043'; 
+const YOUR_APP_ID = 'a8d236fa7d3345e0afbc88390c23215d'; 
 
 const fetchCurrencyRates = async () => {
   try {
@@ -14,8 +14,10 @@ const fetchCurrencyRates = async () => {
       base: currencyRates.base,
       rates: currencyRates.rates,
     });
+    console.log(currencyRate.rates)
 
     await currencyRate.save();
+    
   } catch (error) {
     console.error('Error fetching currency rates:', error);
   }
@@ -79,4 +81,4 @@ const performCurrencyConversion = async (req, res) => {
   }
 };
 
-export { updateCurrencyRatesEveryHour, getLatestCurrencyRates, performCurrencyConversion };
+export { updateCurrencyRatesEveryHour, getLatestCurrencyRates, performCurrencyConversion,fetchCurrencyRates};
