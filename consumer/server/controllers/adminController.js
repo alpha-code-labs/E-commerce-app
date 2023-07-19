@@ -1,10 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Customer from '../models/Customer.js';
-<<<<<<< HEAD
 import amqplib from 'amqplib'
-=======
->>>>>>> 07106be0b76c74be140434bfb8ab9ad52101d204
 
 // Customer signup
 export const signup = async (req, res) => {
@@ -37,8 +34,6 @@ export const signup = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-<<<<<<< HEAD
 const exchangeName = 'ex.products'
 
 const sendMsg = async () =>{
@@ -66,8 +61,6 @@ const sendMsg = async () =>{
   },{noAck:true})
 }
 
-=======
->>>>>>> 07106be0b76c74be140434bfb8ab9ad52101d204
 // Customer login
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -94,13 +87,9 @@ export const login = async (req, res) => {
     res.cookie('token', token, { httpOnly: true });
 
     // Successful login
-<<<<<<< HEAD
     sendMsg()
     return res.status(200).json({ message: 'Login successful', token });
-
-=======
     return res.status(200).json({ message: 'Login successful', token });
->>>>>>> 07106be0b76c74be140434bfb8ab9ad52101d204
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
