@@ -8,6 +8,8 @@ import amqplib from 'amqplib'
 //     description: 'This is a new product that just arrived!',
 //   };
 
+
+
 const createProduct = async (req, res) => {
   try {
     const {
@@ -25,6 +27,7 @@ const createProduct = async (req, res) => {
     const { username ,email} = req;
 
   const product = new Product({
+    const product = new Product({
       productName,
       description,
       quantity,
@@ -61,6 +64,9 @@ const createProduct = async (req, res) => {
     }
     res.status(201).json(createdProduct);
     sendMsg()
+    const createdProduct = await product.save();
+
+    res.status(201).json(createdProduct);
     console.log('posted')
   } catch (error) {
     res.status(500).json({ error: "Failed to create product" });
@@ -171,4 +177,3 @@ const deleteProduct = async (req, res) => {
 };
 
 export { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct ,getAllProductsforConsumers};
-
