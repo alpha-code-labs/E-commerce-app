@@ -1,5 +1,6 @@
 import Button from "../common/Button";
 import icon_profile from "../../assets/avatar_he.jpg"
+import Notifications from "../notification/notifications";
 
 export default function Navbar(props){
   
@@ -94,6 +95,7 @@ export default function Navbar(props){
                 <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
                   {!loggedIn && <Button buttonText='LOGIN' />}
                   {!loggedIn && <Button buttonText='SIGN UP' />}
+                  {loggedIn && <Notifications/> }
                   {loggedIn  && <div className="cursor-pointer" onClick={()=>{setShowProfile(true); setShowProductDetails(false)}} >
 
                         <div className="w-[60px] h-[60px]">
