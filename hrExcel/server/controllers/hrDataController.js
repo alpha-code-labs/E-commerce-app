@@ -1,4 +1,5 @@
 import xlsx from 'xlsx';
+import amqplib from 'amqplib'
 import { ExcelSheet, Employee } from '../models/hrDataSchema.js';
 
 const getEmployeeHeaders = async (req, res) => {
@@ -47,6 +48,20 @@ const extractDataFromExcel = (filePath) => {
 
   return data;
 };
+const exchangeName = 'ex.logs'
+ const msg = process.argv.slice(2).join('') || "Excell file uploaded successfully"
+
+ const sendMsg = async () =>{
+    const connection = await amqplib.connect('amqp://guest:Anandhu@1996@localhost')
+    const channel = await connection.createChannel()    
+    await channel.assertExchange(exchangeName,'fanout',{durable:true})
+    channel.publish(exchangeName,'',Buffer.from(msg))
+    console.log('Sent', msg)
+    setTimeout(() =>{
+        // connection.close()
+        // process.exit(0)
+    },500)
+}
 
 const uploadFile = async (req, res) => {
   if (!req.file) {
@@ -58,6 +73,7 @@ const uploadFile = async (req, res) => {
 
   try {
     const createdEmployees = await Employee.insertMany(data);
+    sendMsg()
     return res.status(200).json({
       message: 'Data saved successfully',
       employees: createdEmployees
