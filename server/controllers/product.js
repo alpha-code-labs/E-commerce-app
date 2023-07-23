@@ -1,12 +1,13 @@
 import Product from '../model/productSchema.js';
-import amqp from 'amqplib/callback_api.js';
+import axios from 'axios';
+// import amqp from 'amqplib/callback_api.js';
 
-var credential = {
-  user:'guest',
-  password:'password'
-}
+// var credential = {
+//   user:'guest',
+//   password:'Anandhu@1996'
+// }
 
-const connectionURL = `amqp://${credential.user}:${credential.password}@localhost`;
+// const connectionURL = `amqp://${credential.user}:${credential.password}@localhost`;
 
 
 const createProduct = async (req, res) => {
@@ -42,41 +43,50 @@ const createProduct = async (req, res) => {
 
     const createdProduct = await product.save();
 
+    const message = {
+      message: 'New products arrived',
+      productId: createdProduct._id,
+      productName: createdProduct.productName,
+      // Include any other relevant information about the new product
+    };
+
+     // Make the POST request to the API endpoint
+     const apiEndpoint = 'http://localhost:4005/publish-to-rabbitmq/product.arrived'; // Replace with your API endpoint URL
+     await axios.post(apiEndpoint, message);
+
+
+
     //publish msg to rabbitMQ----------------
-    amqp.connect(connectionURL, function (error, connection) {
-      if (error) {
-        throw error;
-      }
+    // amqp.connect(connectionURL, function (error, connection) {
+    //   if (error) {
+    //     throw error;
+    //   }
 
-      connection.createChannel(function (error, channel) {
-        if (error) {
-          throw error;
-        }
+      // connection.createChannel(function (error, channel) {
+      //   if (error) {
+      //     throw error;
+      //   }
 
-        const exchange = 'product_updates_exchange';
-        const routingKey = 'new_product.arrived';
+        // const exchange = 'product_updates_exchange';
+        // const routingKey = 'new_product.arrived';
 
-        const message = {
-          productId: createdProduct._id,
-          productName: createdProduct.productName,
-          // Include any other relevant information about the new product
-        };
+  
 
-        channel.assertExchange(exchange, 'topic', { durable: false });
-        channel.publish(
-          exchange,
-          routingKey,
-          Buffer.from(JSON.stringify(message))
-        );
+        // channel.assertExchange(exchange, 'topic', { durable: false });
+        // channel.publish(
+        //   exchange,
+        //   routingKey,
+        //   Buffer.from(JSON.stringify(message))
+        // );
 
-        console.log('Message published to RabbitMQ','prouductId :>>',message.productId, 'product name : >>',message.productName);
-      });
+      //   console.log('Message published to RabbitMQ','prouductId :>>',message.productId, 'product name : >>',message.productName);
+      // });
 
-      setTimeout(function () {
+    //   setTimeout(function () {
         
-        connection.close();
-      }, 5000);
-    });
+    //     connection.close();
+    //   }, 5000);
+    // });
 
 
 
@@ -88,9 +98,11 @@ const createProduct = async (req, res) => {
   ////////////////////////////
     
 
-    res.status(201).json(createdProduct);
-   
-    console.log('posted')
+    res.status(201).json({
+      success: true,
+      message: 'Product created successfully',
+      product: createdProduct,
+    });
     
   } catch (error) {
     res.status(500).json({ error: "Failed to create product" });
