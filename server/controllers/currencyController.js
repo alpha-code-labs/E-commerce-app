@@ -74,6 +74,20 @@ const performCurrencyConversion = async (req, res) => {
     }
 
     const convertedAmount = (amount / rates[from]) * rates[to];
+    
+    const message = {
+      message: 'Currency conversion successfull',
+      from:from,
+      to:to,
+      amount:amount,
+      convertedAmount
+      // Include any other relevant information about the new product
+    };
+    
+
+     // Make the POST request to the API endpoint
+     const apiEndpoint = 'http://localhost:4005/publish-to-rabbitmq/currency.converted'; // Replace with your API endpoint URL
+     await axios.post(apiEndpoint, message);
 
     return res.json({ from, to, amount, convertedAmount });
   } catch (error) {
