@@ -5,15 +5,16 @@ import Navbar from '../components/navbar/Navbar'
 import Profile from "../components/Profile"
 import ProductDetails from "../components/productDetails/ProductDetails"
 import axios from 'axios'
+import _URL from '../connectionStrings'
 
 
 export default function Products(props){
     //change to const
     const [defaultProductList, setDefaultProducts] = useState(null) 
-    const productListUrl = 'http://localhost:8000/inventory/api/products'
+    const productListUrl = _URL.products
     const [showProfile, setShowProfile] = useState(false) 
     const [showDefault, setShowDefault] = useState(true)
-    const [loggedIn, setLoggedIn] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(true)
     const [userData, setUserData] =  useState(null)
 
     //these state will be used for handling Product Details page
@@ -68,7 +69,7 @@ export default function Products(props){
         if(token){
             console.log('token got inside', token)
 
-            const url = await axios.get('http://localhost:8010/api/customer/customer',{
+            const url = await axios.get(_URL.customerLogin,{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -84,6 +85,9 @@ export default function Products(props){
 
     useEffect(()=>{
         fetchUserData()
+
+        //temp
+        setUserData({username:'Ajay', password: 'adfdf', email: 'ajayaxes318@gmail.com'})
     },[])
 
 
@@ -96,16 +100,18 @@ export default function Products(props){
             loggedIn={loggedIn} 
             userData={userData} 
             onChange={onSearchBarChange} />}
-        {!showProfile && !showProductDetails && !showDefault && searchedProducts && <DisplaySearchedProducts 
-            setShowProductDetails={setShowProductDetails}
-            setProductId={setProductId}
-            products={searchedProducts}/>
-        }
-        {!showProfile && !showProductDetails && showDefault && defaultProductList && <DisplayDefaultProducts 
-            setShowProductDetails={setShowProductDetails}
-            setProductId={setProductId}
-            products={defaultProductList} />
-        }
+            <div className="absolute w-full left-0 top-[130px] ">
+                {!showProfile && !showProductDetails && !showDefault && searchedProducts && <DisplaySearchedProducts 
+                    setShowProductDetails={setShowProductDetails}
+                    setProductId={setProductId}
+                    products={searchedProducts}/>
+                }
+                {!showProfile && !showProductDetails && showDefault && defaultProductList && <DisplayDefaultProducts 
+                    setShowProductDetails={setShowProductDetails}
+                    setProductId={setProductId}
+                    products={defaultProductList} />
+                }
+            </div>
 
         {showProfile && !showProductDetails && <Profile 
             userData={userData}

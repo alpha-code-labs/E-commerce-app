@@ -45,7 +45,7 @@ export default function Profile(props){
 
     return(
     <>
-        <div className="topbar w-full py-6 px-10 flex justify-between item-end shadow items-center">
+        <div className="topbar w-full py-6 px-10 pr-15 flex justify-between item-end shadow items-center">
                 <div className=''>
                     <h1 
                         onClick={()=>setShowProfile(false)}

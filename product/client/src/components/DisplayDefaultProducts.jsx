@@ -21,8 +21,6 @@ export default function DisplayDefaultPoducts(props){
         productGroups.push({category:category, products:categoryProducts})
     }
 
-
-
     return(
         <>
             <div className="w-full min-h-full pb-4 pl-4 mt-0 box-border">

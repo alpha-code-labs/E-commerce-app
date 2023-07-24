@@ -5,7 +5,7 @@ import Notifications from "../notification/notifications";
 export default function Navbar(props){
   
   const loggedIn = props.loggedIn
-  const userData = props.userDaa
+  const userData = props.userData
   const onChange = props.onChange
   const setShowProfile = props.setShowProfile
   const setShowProductDetails = props.setShowProductDetails
@@ -13,7 +13,7 @@ export default function Navbar(props){
   return (
     <>
       {/* <!-- Header --> */}
-      <header>
+      <header className="fixed left-0 top-0 z-20 bg-white w-full">
         {/* <!-- navbar and menu --> */}
         <nav className="shadow">
           <div className="flex justify-between items-center py-6 px-10 container">
@@ -95,7 +95,7 @@ export default function Navbar(props){
                 <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
                   {!loggedIn && <Button buttonText='LOGIN' />}
                   {!loggedIn && <Button buttonText='SIGN UP' />}
-                  {loggedIn && <Notifications/> }
+                  {loggedIn && <Notifications userData = {userData} /> }
                   {loggedIn  && <div className="cursor-pointer" onClick={()=>{setShowProfile(true); setShowProductDetails(false)}} >
 
                         <div className="w-[60px] h-[60px]">

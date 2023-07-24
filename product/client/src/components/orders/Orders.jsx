@@ -1,13 +1,14 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import Loading from '../common/Loading'
+import _URL from '../../connectionStrings'
 
 export default function Orders(props){
     
     const userId = props.userId
     const [loading, setLoading] = useState(true)
     const [orderData, setOrderData] = useState(null)
-    const url = `http://localhost:8000/profile/orders2/getAllOrders/${userId}`
+    const url = `${_URL.orders}/${userId}`
     
 
     useEffect(()=>{

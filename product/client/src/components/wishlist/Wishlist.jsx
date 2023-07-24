@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 import WishlistItem from './WishlistItem'
 import Loading from '../common/Loading'
+import _URL from '../../connectionStrings'
 
 
 export default function Wishlist(props){
@@ -10,11 +11,11 @@ export default function Wishlist(props){
     const [loading, setLoading] = useState(false)
     const userId = props.userId
     const [wishlistId, setWishlistId] = useState(null)
-    const url = `http://localhost:8000/profile/wishlist/getall/${userId}`
+    const url = `${_URL.wishlistItems}/${userId}`
     //const wishlistHost = 'http://localhost:8000/profile/wishlist'
     //const cartHost = "http://localhost:8000/profile/cart"
     //const productHost = "http://localhost:8000/profile/wishlist"
-    const productUrl = `http://localhost:8000/inventory/api/product/`
+    const productUrl = `${_URL.product}/`
     
 
 
@@ -49,7 +50,7 @@ export default function Wishlist(props){
     useEffect(()=>{
         fetchProducts()
 
-        const url = `http://localhost:8000/profile/wishlist/getwishlists/${userId}`
+        const url = `${_URL.wishlists}/${userId}`
         axios.get(url).then(response=>{
             setWishlistId(response.data[0]._id)
             console.log(response.data[0]._id, 'wishlist id ')
@@ -58,16 +59,14 @@ export default function Wishlist(props){
 
     const addToCart = (itemId)=>{
 
-        const url = `http://localhost:8000/profile/cart/getcartitems/${userId}`
-
-        axios.get(`http://localhost:8000/profile/cart/getcartitems/${userId}`).then(response=>{
+        axios.get(`${_URL.cartItems}/${userId}`).then(response=>{
             if(response.error){
                 console.log(response.error)
             }
 
             else{
                 console.log('everything looks okay')
-                axios.post('http://localhost:8000/profile/cart/createcartitem',{userId:userId, productId: itemId, quantity:1}).then(()=>{
+                axios.post(_URL.createCartItem,{userId:userId, productId: itemId, quantity:1}).then(()=>{
                     console.log('item added to cart')
                     deleteWishlistItem(itemId)
                 })
@@ -76,11 +75,11 @@ export default function Wishlist(props){
             if(error.response.status){
                 //cart doesn't exist. Create a new cart and then add item to it..
 
-                axios.post('http://localhost:8000/profile/cart/create', {userId: userId}).then((res)=>{
+                axios.post(_URL.createCart, {userId: userId}).then((res)=>{
                     //now add the current item to it
 
                     if(res.status === 201){
-                        axios.post('http://localhost:8000/profile/cart/createcartitem',{userId:userId, productId: itemId, quantity:1}).then(()=>{
+                        axios.post(_URL.createCartItem,{userId:userId, productId: itemId, quantity:1}).then(()=>{
                             console.log('item added to cart')
                             deleteWishlistItem(itemId)
                         })
@@ -93,7 +92,7 @@ export default function Wishlist(props){
     }
 
     const deleteWishlistItem = (itemId)=>{
-        const url = `http://localhost:8000/profile/wishlist/${wishlistId}/items/${itemId}`
+        const url = `${_URL.deleteWishlistItem}/${wishlistId}/items/${itemId}`
         axios.delete(url).then(()=>{
             console.log('product deleted from cart')
             fetchProducts()
