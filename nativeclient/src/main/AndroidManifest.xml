@@ -1,0 +1,331 @@
+mport React, { useState, useEffect } from 'react';
+import { SafeAreaView, Text, TextInput, View, Image, Button, Alert } from 'react-native';
+import tw from 'twrnc';
+import axios from 'axios';
+import DropDownPicker from 'react-native-dropdown-picker';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions'
+// import { Alert } from 'react-native';
+
+ // Import the library
+
+const CurrencyScreen = () => {
+  const [amount, setAmount] = useState('');
+  const [to ,setTo]=useState('')
+  const [from , setFrom]=useState('')
+  const [convertedAmt,setConvertedAmt]=useState('');
+  const[currencySymbol,setCurrencySymbol]=useState([]);
+  const[isOpen ,setIsOpen]=useState(false) //for dropdown
+  
+//
+
+  const [filteredItems, setFilteredItems] = useState(dropdownItems);
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearch = (text) => {
+    setSearchValue(text);
+    const filtered = dropdownItems.filter((item) =>
+      item.label.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredItems(filtered);
+  };
+
+  //
+
+  const YOUR_APP_ID = 'a8d236fa7d3345e0afbc88390c23215d';
+  const openExchangeApi = `https://openexchangerates.org/api/latest.json?app_id=${YOUR_APP_ID}`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(openExchangeApi);
+        const symbol = Object.keys(response.data.rates);
+        console.log(symbol);
+        setCurrencySymbol((prevSymbol) => {
+          if (prevSymbol.length === 0) {
+            return symbol;
+          } else {
+            return prevSymbol;
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+
+
+      
+  const handleConvert = () => {
+    
+    console.log('handles');
+    
+
+    
+    const url = `http://172.16.1.28:9002/api/currency/convert?from=${from}&to=${to}&amount=${amount}`
+
+    axios
+      .get(url)
+      .then((res) => {
+        const getCurrnecy = res.data.convertedAmount;
+        console.log(getCurrnecy);
+        setConvertedAmt(getCurrnecy.toFixed(2));
+        // setConvertCurrency(getCurrnecy.toFixed(2));
+      })
+      .catch((error) => {
+        console.log('AxiosError:', error);
+        Alert.alert('Error', 'Failed to convert currency. Please try again later.');
+      });
+  };
+
+  const dropdownItems = currencySymbol.map((symbol) => ({ label: symbol, value: symbol }));
+  
+  // const pickImage = async () => {
+  //   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
+  
+  //   if (status === 'granted') {
+  //     // User has granted both camera and camera roll permissions
+  //     let result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //       allowsEditing: true,
+  //       aspect: [4, 3],
+  //       quality: 1,
+  //     });
+  
+  //     if (!result.cancelled) {
+  //       setImage(result.uri);
+  //     }
+  //   } else if (status === 'denied') {
+  //     // User has denied camera access, but still has access to camera roll
+  //     let result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       allowsEditing: true,
+  //       aspect: [4, 3],
+  //       quality: 1,
+  //     });
+  
+  //     if (!result.cancelled) {
+  //       setImage(result.uri);
+  //     }
+  //   } else {
+  //     // User has neither granted nor denied camera access
+  //     // We can handle this case based on your app's requirements
+  //     // For simplicity, we'll just show an alert here
+  //     Alert.alert('Camera and camera roll access required', 'Please grant access to both the camera and camera roll to pick an image.');
+  //   }
+  // };
+
+  const pickFromGallery = async () => {
+    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+  
+    if (status === 'granted') {
+      try {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.5,
+        });
+  
+        if (!result.cancelled) {
+          const formData = new FormData();
+          formData.append('file', {
+            uri: result.uri,
+            type: 'image/jpeg', // Modify the type if required
+            name: 'image.jpg', // Modify the name if required
+          });
+  
+          const backendUploadURL = 'http://172.16.1.24:9002/upload'; // Replace this with your actual backend URL
+  
+          // Use Axios to make the network request
+          const response = await axios.post(backendUploadURL, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+  
+          const data = response.data;
+          console.log('Uploaded image URL:', data.url);
+          // You can do something with the uploaded image URL, like save it to the state or database
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        // Handle the error
+      }
+    } else {
+      Alert.alert('You need to give permission');
+    }
+  };
+
+  const pickFromCamera = async () => {
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA);
+  
+    if (granted) {
+      try {
+        let result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.5,
+        });
+  
+        if (!result.canceled) {
+          const formData = new FormData();
+          formData.append('file', {
+            uri: result.uri,
+            type: 'image/jpeg', // Modify the type if required
+            name: 'image.jpg', // Modify the name if required
+          });
+  
+          const backendUploadURL = 'http://172.16.1.24:9002/upload'; // Replace this with your actual backend URL
+  
+          // Use Axios to make the network request
+          const response = await axios.post(backendUploadURL, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+  
+          const data = response.data;
+          console.log('Uploaded image URL:', data.url);
+          // You can do something with the uploaded image URL, like save it to the state or database
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        // Handle the error
+      }
+    } else {
+      Alert.alert('You need to give permission');
+    }
+  };
+
+  return (
+    <SafeAreaView style={tw`flex-1 p-10  mt-[25px] rounded items-center bg-purple-200`}>
+      <View style={tw`flex justify-center`}>
+       
+        <View style={tw`w-[350px] flex-col space-y-8 bg-white rounded-sm p-10 items-end mb-20  mt-5 h-[500px]  relative`}>
+          <View style={tw``}>
+            <Text style={tw`text-center border bg-gray-100  rounded text-blue-800 text-xl font-bold mb-[50px]`}>Currency Converter</Text>
+            <Text style={tw`ml-3`}>Enter Amount</Text>
+            <TextInput
+              style={tw`w-[240px]  h-[50px] m-3 border border-gray-400  p-3`}
+              keyboardType='numeric'
+              value={amount}
+              onChangeText={(text) => setAmount(text)}
+              maxLength={10}
+            />
+          </View>
+          
+          <View style={tw`flex-row justify-center  items-center justify-center"`}>
+            
+
+            <View style={tw`p-8  `}>
+            <Text style={tw`ml-3`}>From</Text>
+            <DropDownPicker 
+            style={tw`w-[100px] z-2`}
+            items={dropdownItems} open={isOpen} 
+            setOpen={()=>setIsOpen(!isOpen)}
+             value={from}
+             setValue={(val)=>setFrom(val)}
+             maxHeight={200}
+             dropDownContainerStyle={tw`w-[100px]`}
+             searchablePlaceholder="Search"
+          searchable
+          onSearch={handleSearch}
+          dropDownPosition="top"
+
+             autoScroll/>
+
+          </View>
+
+         
+
+            {/* <View style={tw`items-center `}> */}
+              <Image style={tw`h-[20px] w-[20px] `} source={require('../assets/two-arrows.png')} />
+            {/* </View> */}
+             <View style={tw`p-8 z-2`}>
+             <Text style={tw`ml-3`}>To</Text>
+            <DropDownPicker 
+            style={tw`w-[100px] z-2`}
+            items={dropdownItems} open={isOpen} 
+            setOpen={()=>setIsOpen(!isOpen)}
+             value={to}
+             setValue={(val)=>setTo(val)}
+             maxHeight={200}
+             dropDownContainerStyle={tw`w-[100px]`}
+             searchablePlaceholder="Search"
+          searchable
+          onSearch={handleSearch}
+          dropDownPosition="top"
+
+             autoScroll/>
+
+          </View>
+          </View>
+
+          {!convertedAmt ? null :<View style={tw` `}>
+            <Text style={tw`font-semibold text-xl p-3 mb-4 mt-2 mr-5 w-auto bg-gray-100 rounded`}>{parseFloat(amount).toFixed(2)} {from} = {convertedAmt} {to}</Text>
+          </View>}
+          
+
+          <Text
+           
+            style={tw`w-[240px] mr-2 p-3 bg-blue-500 font-semibold text-xl cursor-pointer rounded-sm text-white text-center `}
+            onPress={handleConvert}
+          >Convert</Text>
+
+      
+          
+<Button title="Pick an image from camera" onPress={() => pickFromCamera()} />
+<Button title="Pick an image from gallery" onPress={() => pickFromGallery()} />
+        </View>
+        
+      </View>
+    </SafeAreaView>
+  );
+};
+
+
+
+export default CurrencyScreen;
+<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.camerapermission">
+
+    <!-- Add the following line to request camera permission -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Add any other necessary application settings here -->
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider 
+        android:auth
+
+    </application>
+</manifest> -->
+
+
