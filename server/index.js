@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import hrDataRoutes from './routes/hrDataRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
 import { sendMail } from './controllers/sendmail.js';
+import schemalessUploadRoutes from './routes/schemalessUploadRoutes.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/hrdata', hrDataRoutes);
 app.use('/groups', groupRoutes);
+app.use('/schemaless', schemalessUploadRoutes);
 
 app.post('/mail', async (req, res) => {
   try {
@@ -46,3 +48,9 @@ mongoose
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+
+
+
+
+
