@@ -1,14 +1,15 @@
 
 //
-const base_ms_inventory = `http://localhost:8003`
-const base_ms_profile = 'http://localhost:8000/profile'
-const base_ms_customer = 'http://localhost:8010'
-const base_ms_notification = 'http://localhost:8010'
+const base_ms_inventory = `http://localhost:4009`
+const base_ms_profile = 'http://localhost:4008'
+const base_ms_customer = 'http://localhost:8001'
+const base_ms_notification = 'http://localhost:4005'
+
 
 
  const  _URL = {
 //for all products
-products : `${base_ms_inventory}/api/products`,
+products : `${base_ms_inventory}/api/consproduct`,
 
 //for single product
 product : `${base_ms_inventory}/api/product`,
@@ -29,7 +30,10 @@ wishlistAdd : `${base_ms_profile}/wishlist`,
 removeWishlistItem : `${base_ms_profile}/wishlist`,
 
 //create cart
-createCart : '${base_ms_profile}/cart/create',
+createCart : `${base_ms_profile}/cart/create`,
+
+//update quuantity
+updateQuantity : `${base_ms_profile}/cart/updatequantity`,
 
 //create cart item
 createCartItem : `${base_ms_profile}/cart/createcartitem`,
@@ -45,13 +49,15 @@ removeCartItem : `${base_ms_profile}/cart/removecartitem`,
 order : `${base_ms_profile}/orders2/getAllOrders`,
 
 //all notifications
-notifications : `${base_ms_notification}/api/notify/notifications`,
+notifications : `${base_ms_notification}/publish-to-rabbitmq`,
 
 //create wishlist
 createWishlist : `${base_ms_profile}/wishlist`,
 
 //delete wishlist item
 deleteWishlistItem : `${base_ms_profile}/wishlist`,
+
+
 
 }
 

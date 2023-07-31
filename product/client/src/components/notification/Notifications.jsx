@@ -33,7 +33,7 @@ export default function Notifications(props){
 
 
 
-    const url = `${_URL.notifications}/${userData.userId}`
+    const url = `${_URL.notifications}/${userData._id}`
     const [nCount, setNCount] = useState(0)
 
     useEffect(()=>{
@@ -41,9 +41,10 @@ export default function Notifications(props){
     const fetchData = async () => {
       try {
         const response = await axios.get(url);
-            setNCount(response.data.length)
+            setNCount(response.data.order.length)
             console.log(nCount, 'ncount')
-            setNotifications(response.data)
+            console.log(response.data, 'notifications....')
+            setNotifications(response.data.order)
 
       } catch (error) {
         console.error('Error fetching data:', error);

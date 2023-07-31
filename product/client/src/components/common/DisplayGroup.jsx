@@ -9,6 +9,11 @@ export default function DisplayGroup(props){
     const setShowProductDetails = props.setShowProductDetails
     const setProductId = props.setProductId
 
+
+    console.log('products', products)
+
+
+
     return(
     <>
     <div className="outer_wrapper box-border p-2 w-full h-[360px] mt-6 bg-white drop-shadow-md">

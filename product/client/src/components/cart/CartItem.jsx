@@ -3,6 +3,7 @@ import plus_icon from '../../assets/Plus.svg'
 import minus_icon from '../../assets/Minus.svg'
 import { useState } from 'react'
 import axios from 'axios'
+import _URL from '../../connectionStrings'
 
 export default function CartItem(props){
 
@@ -26,7 +27,7 @@ export default function CartItem(props){
         }
         else{
             //decrease by one
-            const url = ` http://localhost:8000/profile/cart/updatequantity/${userId}/${itemId} `
+            const url = ` ${_URL.updateQuantity}/${userId}/${itemId} `
             axios.put(url,{userId: userId, cartItemId: itemId, quantity: quantity-1}).then(()=>{
                 setGrandTotal(grandTotal - productPrice)
                 setQuantity(quantity-1)})
@@ -35,7 +36,7 @@ export default function CartItem(props){
 
     const increaseQuantity = (itemId)=>{
         //increase by one
-        const url = ` http://localhost:8000/profile/cart/updatequantity/${userId}/${itemId} `
+        const url = ` ${_URL.updateQuantity}/${userId}/${itemId} `
         axios.put(url,{userId: userId, cartItemId: itemId, quantity: quantity+1}).then(()=>{
             setGrandTotal(grandTotal + productPrice)
             setQuantity(quantity+1)})        

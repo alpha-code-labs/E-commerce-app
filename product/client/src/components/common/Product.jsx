@@ -5,7 +5,7 @@ export default function Product(props){
 
     const data = props.productData
 
-    const productName = data.name
+    const productName = data.productName
     const productPrice = data.price
     const productDescription = data.description
     const productImageUrl = data.image

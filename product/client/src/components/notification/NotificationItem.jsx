@@ -44,7 +44,7 @@ export default function NotificationItem(props){
             onClick={handleClick}>
             <div className='text-sm font-semibold bg-gradient-to-tr from-indigo-600 to-teal-200 bg-clip-text text-transparent'>{title}</div>
                 <div className='text-sm font-sans'>
-                   {productData && message}
+                   {message.email}
 
                 </div>
             

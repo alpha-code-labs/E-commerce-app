@@ -14,7 +14,7 @@ export default function Products(props){
     const productListUrl = _URL.products
     const [showProfile, setShowProfile] = useState(false) 
     const [showDefault, setShowDefault] = useState(true)
-    const [loggedIn, setLoggedIn] = useState(true)
+    const [loggedIn, setLoggedIn] = useState(false)
     const [userData, setUserData] =  useState(null)
 
     //these state will be used for handling Product Details page
@@ -87,7 +87,7 @@ export default function Products(props){
         fetchUserData()
 
         //temp
-        setUserData({username:'Ajay', password: 'adfdf', email: 'ajayaxes318@gmail.com'})
+       // setUserData({username:'Ajay', password: 'adfdf', email: 'ajayaxes318@gmail.com'})
     },[])
 
 

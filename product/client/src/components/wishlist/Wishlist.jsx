@@ -107,7 +107,7 @@ export default function Wishlist(props){
                     console.log(product)
                     return (
                     <WishlistItem 
-                        productName={product.name}
+                        productName={product.productName}
                         productPrice={product.price}
                         productImage={product.image}
                         productId={product._id}

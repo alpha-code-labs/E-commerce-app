@@ -8,7 +8,7 @@ export default function Orders(props){
     const userId = props.userId
     const [loading, setLoading] = useState(true)
     const [orderData, setOrderData] = useState(null)
-    const url = `${_URL.orders}/${userId}`
+    const url = `${_URL.order}/${userId}`
     
 
     useEffect(()=>{

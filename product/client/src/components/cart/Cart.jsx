@@ -3,14 +3,15 @@ import axios from 'axios'
 import CartItem from './CartItem'
 import Button from '../common/Button'
 import Loading from '../common/Loading'
+import _URL from '../../connectionStrings'
 
 export default function Cart(props){
     
     const [products, setProducts] =  useState(null)
     const [loading, setLoading] = useState(true)
     const userId = props.userId
-    const url = `http://localhost:8000/profile/cart/getcartitems/${userId}`
-    const productUrl = `http://localhost:8000/inventory/api/product/`
+    const url = `${_URL.cartItems}/${userId}`
+    const productUrl = `${_URL.product}/`
     const [cartId, setCartId] = useState(null)
     const [grandTotal, setGrandTotal] = useState(0)
     const [orderPlaced, setOrderPlaced] = useState(false)
@@ -57,7 +58,7 @@ export default function Cart(props){
     const deleteCartItem = (itemId)=>{
         //remove item from Cart backend
         //once done refetch the products data and set Products state variable
-        axios.delete(`http://localhost:8000/profile/cart/removecartitem/${userId}/${itemId}`).then(()=>{
+        axios.delete(`http://localhost:4008/cart/removecartitem/${userId}/${itemId}`).then(()=>{
             console.log('product deleted from Cart')    
             fetchProducts()
         })
@@ -66,7 +67,7 @@ export default function Cart(props){
     const deleteCart = async ()=>{
         for(const item of products){
             const itemId = item.productObjectId
-            await axios.delete(`http://localhost:8000/profile/cart/removecartitem/${userId}/${itemId}`)
+            await axios.delete(`http://localhohst:4008/cart/removecartitem/${userId}/${itemId}`)
         }
 
        console.log('Cart Deleted !')
@@ -74,13 +75,13 @@ export default function Cart(props){
 
     const handleCheckout = ()=>{
         console.log(cartId)
-        const url = `http://localhost:8000/profile/orders/createOrder`
+        const url = `http://localhost:4008/order/createOrder`
         axios.post(url, {
             userId : userId,
             cartId: cartId,
             shippingAddress: "123 Main St, sector 34, gurugram",
             contactNumber: "993732718278",
-            email: "sumesh@gmail.com",
+            email: "ajay@gmail.com",
             additionalNotes: "Give it to watchman"
         }).then((response)=>{
             console.log('ordersId', response.data.order._id)
@@ -114,7 +115,7 @@ export default function Cart(props){
 
                     console.log(product)
                     return (<CartItem 
-                        productName={data.name}
+                        productName={data.productName}
                         productPrice={data.price}
                         productImage={data.image}
                         productObjectId = {productObjectId}
