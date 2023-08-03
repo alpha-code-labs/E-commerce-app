@@ -13,6 +13,7 @@ function AdminRegister() {
     email: '',
     password: '',
     confirmPassword: '',
+    role:''
   });
 
   const handleShowPassword = () => {
@@ -33,16 +34,23 @@ function AdminRegister() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, email, password, confirmPassword } = data;
+    const { username, email, password, confirmPassword,role } = data;
+    console.log('Selected role:', role);
   
     if (username && email && password && confirmPassword) {
       if (password === confirmPassword) {
         try {
-          const response = await axios.post('http://localhost:9002/api/admin/signup', data);
-          console.log('Registration successful', response.data);
-          toast.success(response.data.message);
-          navigate('/login');
-        } catch (error) {
+        const response = await axios.post('http://localhost:8002/api/admin/signup', {
+          username,
+          email,
+          password,
+          role, // Include the role in the request body
+        });
+        console.log('Registration successful', response.data);
+        toast.success(response.data.message);
+        // After successful registration, navigate to the login page passing the role to be used during login
+        navigate('/login', { state: { role } });
+      } catch (error) {
           if (error.response && error.response.data) {
             console.error('Registration failed', error.response.data);
             toast.error(error.response.data.message);
@@ -88,7 +96,22 @@ function AdminRegister() {
             value={data.email}
             onChange={handleOnChange}
           />
-
+          
+          <div className="flex flex-col">
+            <label htmlFor="role" className="text-sm font-medium">
+              Role
+            </label>
+            <select
+              id="role"
+              name="role"
+              className="border py-2 px-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={data.role}
+              onChange={handleOnChange}
+            >
+              <option value="customer">Customer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
           <label htmlFor="password" className="text-sm font-medium">
             Password
           </label>

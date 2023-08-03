@@ -18,20 +18,25 @@ export const getToken = async (req, res) => {
     const decodedToken = jwt.verify(tokenValue, '1234');
 
     // Get the email, username, and _id from the token payload
-    const { email, username, _id } = decodedToken;
+    const { email, username, _id, role } = decodedToken;
 
     // Find the admin with the provided email
     const admin = await Admin.findOne({ email });
-    
 
     if (!admin) {
       return res.status(404).json({ error: 'Admin not found' });
     }
 
-    // Attach the username and _id to the admin object
+    // Check if the admin role is 'admin'
+    if (role !== 'admin') {
+      return res.status(403).json({ error: 'Access forbidden. Only admins are allowed.' });
+    }
+
+    // Attach the username, _id, and role to the admin object
     admin.username = username;
     admin._id = _id;
-     
+    admin.role = role;
+
     // Return the admin details
     return res.status(200).json(admin);
   } catch (error) {

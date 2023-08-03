@@ -4,7 +4,6 @@ const adminSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    // unique: true,
   },
   password: {
     type: String,
@@ -14,6 +13,11 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'customer'], 
+    default: 'customer',
   },
 });
 

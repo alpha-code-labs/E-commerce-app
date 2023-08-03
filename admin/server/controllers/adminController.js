@@ -2,9 +2,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Admin from '../models/Admin.js';
 
-// Admin signup
 export const signup = async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, role } = req.body; // Include the role from the request body
 
   try {
     // Check if admin with the provided email already exists
@@ -22,6 +21,7 @@ export const signup = async (req, res) => {
       username,
       password: hashedPassword,
       email,
+      role, // Set the role for the new admin
     });
 
     // Save the new admin to the database
@@ -52,11 +52,12 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    // Generate JWT token
+    // Generate JWT token with role information
     const tokenPayload = {
       email: admin.email,
       username: admin.username,
       _id: admin._id,
+      role: admin.role, // Include the role in the token payload
     };
 
     const token = jwt.sign(tokenPayload, '1234', { expiresIn: '1h' });
